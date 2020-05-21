@@ -13,10 +13,10 @@
         </div>
 
         <div class="content container">
-            <div class="row">
-                <div class="col-md-8">
-                    {% block content %}
-                    {% endblock %}
+            <div class="row">           
+                <div class="col-md-8">  
+                    {% block content %} <!-- where the old for loop used to be in post_list.html -->
+                    {% endblock %}      <!-- this is where we can inject blocks of html code from other files!-->
                 </div>
             </div>
         </div>
