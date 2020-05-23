@@ -14,6 +14,7 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
 
+# New post form page
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -27,6 +28,7 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
 
+# Edit existing post page
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -41,6 +43,19 @@ def post_edit(request, pk):
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
 
+# Show unpublished posts
 def post_draft_list(request):
     posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
     return render(request, 'blog/post_draft_list.html', {'posts': posts})
+
+# Publish draft post
+def post_publish(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.publish()
+    return redirect('post_detail', pk=pk)
+
+# Delete existing post
+def post_remove(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()                           # Model.delete is standard django method.
+    return redirect('post_list')
