@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import Group
 from django.utils import timezone
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
+from .decorators import unauthenticated_user, allowed_users
 
 # Create your views here.
 # NOTE: My first view creation :o
@@ -19,6 +21,7 @@ def post_detail(request, pk):
 
 # New post form page
 @login_required
+@allowed_users(allowed_roles=['admin'])
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -34,6 +37,7 @@ def post_new(request):
 
 # Edit existing post page
 @login_required
+@allowed_users(allowed_roles=['admin'])
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -50,12 +54,14 @@ def post_edit(request, pk):
 
 # Show unpublished posts
 @login_required
+@allowed_users(allowed_roles=['admin'])
 def post_draft_list(request):
     posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
     return render(request, 'blog/post_draft_list.html', {'posts': posts})
 
 # Publish draft post
 @login_required
+@allowed_users(allowed_roles=['admin'])
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
@@ -63,12 +69,13 @@ def post_publish(request, pk):
 
 # Delete existing post
 @login_required
+@allowed_users(allowed_roles=['admin'])
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()                           # Model.delete is standard django method.
     return redirect('post_list')
 
-# Add comment to post
+# Add comment to post           TODO: If user is logged in, change form such that name field not required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -83,25 +90,32 @@ def add_comment_to_post(request, pk):
     return render(request, 'blog/add_comment_to_post.html', {'form': form})
 
 @login_required
+@allowed_users(allowed_roles=['admin'])
 def comment_approve(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect('post_detail', pk=comment.post.pk)
 
 @login_required
+@allowed_users(allowed_roles=['admin'])
 def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('post_detail', pk=comment.post.pk)
 
-def signup(request):                                    #TODO: Add user to group that can comment, but not make new posts
+@unauthenticated_user                                   #NOTE custom decorator made in decorators.py
+def signup(request):                                  
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
+            raw_password = form.cleaned_data.get('password')
+            user1 = authenticate(username=username, password=raw_password)
+
+            group = Group.objects.get(name='newcomer')
+            user.groups.add(group)
+
             login(request, user)
             return redirect('post_list')
     else:
