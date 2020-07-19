@@ -4,5 +4,8 @@
 __pycache__
 summer
 db.sqlite3
+geckodriver.exe
+geckodriver.log
 /static
 .DS_Store
+Django Girls Workspace.code-workspace
