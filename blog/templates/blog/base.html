@@ -17,8 +17,8 @@
                 {% endif %}
                 <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
             {% else %}
-                <a href="{%url 'login' %}" class="top-menu"><span class="fa fa-sign-in"></span></a>
-                <a href="{%url 'signup' %}" class="top-menu"><span class="fa fa-user-plus"></span></a>
+                <a href="{%url 'login' %}" class="top-menu" id="login_button"><span class="fa fa-sign-in"></span></a>
+                <a href="{%url 'signup' %}" class="top-menu" id="signup_button"><span class="fa fa-user-plus"></span></a>
             {% endif %}
             <h1><a href="/">George's Blog</a></h1>
         </div>

@@ -1,13 +1,25 @@
 from django.test import LiveServerTestCase
+from django.contrib.auth.models import Group
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver import ActionChains
 import time
 #import unittest
+
+########## NOTE DON'T KEEP ?? NOT LIVE SERVER CASE
+from django.test import override_settings
+@override_settings(DEBUG=True)
+
 
 class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
+
+        #create permissions group
+        group_name = "newcomer"
+        self.group = Group(name=group_name)
+        self.group.save()
 
     def tearDown(self):
         self.browser.quit()
@@ -30,9 +42,26 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Blog', header_text)
 
         # He clicks on the sign-up button and is taken to a sign-up page
+        signup_button = self.browser.find_element_by_id('signup_button')
+        signup_button.click()
+
+        time.sleep(1)
 
         # He enters his username and password, confirming his new account (let's make it admin too)
+        signup_username = self.browser.find_element_by_id('id_username')
+        signup_password1 = self.browser.find_element_by_id('id_password1')
+        signup_password2 = self.browser.find_element_by_id('id_password2')
+        signup_submit_button = self.browser.find_element_by_id('signup_submit')
 
+        signup_username.send_keys('Jane_Doe')
+        signup_password1.send_keys('DjangoTest123')
+        signup_password2.send_keys('DjangoTest123')
+        time.sleep(1)
+        signup_submit_button.click()
+
+        time.sleep(3)
+
+        self.fail('Finish the test!')
         # Upon returning to the home page, he finds some new buttons available to him
 
         # He presses the new blog post button and finds a post submission form
