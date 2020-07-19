@@ -1,9 +1,10 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-import unittest
+#import unittest
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -21,7 +22,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # George has started along the Way of the Testing Goat and
         # pretends to check out a new to-do list website
-        self.browser.get('http://127.0.0.1:8000')
+        self.browser.get(self.live_server_url)
 
         # He notices the page title and header mentions a blog
         self.assertIn('Blog', self.browser.title)
@@ -84,7 +85,5 @@ class NewVisitorTest(unittest.TestCase):
 
         # # Satisfied, he goes back to sleep.
 
-if __name__ == '__main__':
-    unittest.main()             # NOTE: tutorial has warnings='ignore' arg, perhaps not needed?
-
-# NOTE DO THIS!!! He is immediately shown a list of blog posts 
+# if __name__ == '__main__':
+#    unittest.main()             # Not needed anymore
