@@ -1,5 +1,5 @@
-from django.test import LiveServerTestCase
-from django.contrib.auth.models import Group
+from django.test import LiveServerTestCase, Client
+from django.contrib.auth.models import Group, User
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
@@ -21,6 +21,12 @@ class NewVisitorTest(LiveServerTestCase):
         self.group = Group(name=group_name)
         self.group.save()
 
+        self.user_admin = User.objects.create_superuser(
+            username='test',
+            password='test',
+            email='test@test.com',
+        )
+
     def tearDown(self):
         self.browser.quit()
 
@@ -33,7 +39,7 @@ class NewVisitorTest(LiveServerTestCase):
     
     def test_can_start_a_list_and_retrieve_it_later(self):
         # George has started along the Way of the Testing Goat and
-        # pretends to check out a new to-do list website
+        # pretends to check out a new blog
         self.browser.get(self.live_server_url)
 
         # He notices the page title and header mentions a blog
@@ -45,7 +51,7 @@ class NewVisitorTest(LiveServerTestCase):
         signup_button = self.browser.find_element_by_id('signup_button')
         signup_button.click()
 
-        time.sleep(1)
+        time.sleep(1)  #NOTE REPLACE VODOO SLEEPS!
 
         # He enters his username and password, confirming his new account (let's make it admin too)
         signup_username = self.browser.find_element_by_id('id_username')
@@ -56,13 +62,38 @@ class NewVisitorTest(LiveServerTestCase):
         signup_username.send_keys('Jane_Doe')
         signup_password1.send_keys('DjangoTest123')
         signup_password2.send_keys('DjangoTest123')
-        time.sleep(1)
         signup_submit_button.click()
 
-        time.sleep(3)
+        time.sleep(3) #NOTE REPLACE VOODOO SLEEPS!
+        self.fail('Is this the end?!')
 
-        self.fail('Finish the test!')
+        post_text = self.browser.find_element_by_class_name('post').text
+        self.assertIn('Hello yes I am blog continue', post_text, 'this probably wont work')
+
+    def test_admin_user_can_create_and_view_posts(self):
+        self.browser.get(self.live_server_url)
+
+        login_button = self.browser.find_element_by_id('login_button')
+        login_button.click()
+
+        time.sleep(1)
+
+        login_username = self.browser.find_element_by_id('id_username')
+        login_password = self.browser.find_element_by_id('id_password')
+        signup_submit_button = self.browser.find_element_by_id('login_submit')
+
+        login_username.send_keys('test')
+        login_password.send_keys('test')
+        signup_submit_button.click()
+
+        time.sleep(1)
+
+        self.browser.find_element_by_id('post_new_button').click()
+        print(self.user_admin.get_all_permissions())
+        #NOTE CURRENTLY DOESN'T WORK!! Need to figure out how to assign user to admin/is_staff
+        time.sleep(5)
         # Upon returning to the home page, he finds some new buttons available to him
+        
 
         # He presses the new blog post button and finds a post submission form
 
@@ -75,8 +106,7 @@ class NewVisitorTest(LiveServerTestCase):
         # NOTE FINISH THE STORY!
 
         # NOTE INCLUDE THIS LATER! He is invited to enter a to-do item pronto
-        post_text = self.browser.find_element_by_class_name('post').text
-        self.assertIn('Hello yes I am blog continue', post_text, 'this probably wont work')
+
 
 #################################################################################################################### OLD STUFF
         # inputbox = self.browser.find_element_by_id('id_new_item')
