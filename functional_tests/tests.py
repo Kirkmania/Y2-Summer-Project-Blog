@@ -17,15 +17,18 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser = webdriver.Firefox()
 
         #create permissions group
-        group_name = "newcomer"
-        self.group = Group(name=group_name)
-        self.group.save()
+        self.group_admin = Group(name="admin")
+        self.group_admin.save()
+        self.group_newcomer = Group(name="newcomer")
+        self.group_newcomer.save()
 
         self.user_admin = User.objects.create_superuser(
             username='test',
             password='test',
             email='test@test.com',
         )
+
+        self.user_admin.groups.add(self.group_admin)
 
     def tearDown(self):
         self.browser.quit()
@@ -37,7 +40,7 @@ class NewVisitorTest(LiveServerTestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
     
-    def test_can_start_a_list_and_retrieve_it_later(self):
+    def test_user_can_see_blog_posts_and_signup(self):
         # George has started along the Way of the Testing Goat and
         # pretends to check out a new blog
         self.browser.get(self.live_server_url)
@@ -67,6 +70,7 @@ class NewVisitorTest(LiveServerTestCase):
         time.sleep(3) #NOTE REPLACE VOODOO SLEEPS!
         self.fail('Is this the end?!')
 
+        #NOTE NEED TO ADD A POST BEFORE THIS!
         post_text = self.browser.find_element_by_class_name('post').text
         self.assertIn('Hello yes I am blog continue', post_text, 'this probably wont work')
 
@@ -89,8 +93,6 @@ class NewVisitorTest(LiveServerTestCase):
         time.sleep(1)
 
         self.browser.find_element_by_id('post_new_button').click()
-        print(self.user_admin.get_all_permissions())
-        #NOTE CURRENTLY DOESN'T WORK!! Need to figure out how to assign user to admin/is_staff
         time.sleep(5)
         # Upon returning to the home page, he finds some new buttons available to him
         
