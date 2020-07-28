@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group, User
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
+from blog.models import Post
 import time
 #import unittest
 
@@ -27,6 +28,13 @@ class NewVisitorTest(LiveServerTestCase):
             password='test',
             email='test@test.com',
         )
+
+        test = Post.objects.create(author=self.user_admin, title="Hipster Ipsum", text="I'm baby glossier pug gastropub yr woke photo booth.\
+             Whatever umami enamel pin synth organic art party raw denim church-key. Jianbing lyft selvage pabst, \
+            poutine ugh four dollar toast. Kale chips umami thundercats man bun street art truffaut pork belly mixtape distillery hoodie polaroid occupy. \
+            Vegan tacos occupy ethical, craft beer master cleanse crucifix tbh banh mi sartorial activated charcoal snackwave.",
+        created_date="2020-07-28 20:50", published_date="2020-07-28 20:51")
+        test.save()
 
         self.user_admin.groups.add(self.group_admin)
 
@@ -56,7 +64,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         time.sleep(1)  #NOTE REPLACE VODOO SLEEPS!
 
-        # He enters his username and password, confirming his new account (let's make it admin too)
+        # He enters his username and password, confirming his new account
         signup_username = self.browser.find_element_by_id('id_username')
         signup_password1 = self.browser.find_element_by_id('id_password1')
         signup_password2 = self.browser.find_element_by_id('id_password2')
@@ -71,6 +79,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.fail('Is this the end?!')
 
         #NOTE NEED TO ADD A POST BEFORE THIS!
+        # After submitting his signup he returns to the homepage and sees the latest post
         post_text = self.browser.find_element_by_class_name('post').text
         self.assertIn('Hello yes I am blog continue', post_text, 'this probably wont work')
 
@@ -92,9 +101,45 @@ class NewVisitorTest(LiveServerTestCase):
 
         time.sleep(1)
 
+        # Upon returning to the home page, he clicks the new "new post" button and writes a blog post
         self.browser.find_element_by_id('post_new_button').click()
+
+        newpost_title = self.browser.find_element_by_id('id_title')
+        newpost_text = self.browser.find_element_by_id('id_text')
+        post_save_button = self.browser.find_element_by_id('save_post')
+
+        newpost_title.send_keys('Lorem Ipsum')  # Hey cool, this \ thing lets you overflow strings in python!
+        newpost_text.send_keys('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac ex ante. \
+            Nullam iaculis fermentum tortor, non suscipit elit aliquet quis. Donec consequat placerat accumsan. \
+            Praesent et ante non mi finibus pellentesque sed eget metus. In posuere, massa vel aliquet elementum, \
+            metus nisi interdum tellus, in accumsan sapien ex vitae neque. Aliquam viverra in magna vitae fringilla. \
+            Curabitur a scelerisque neque. Ut tortor nisi, posuere sit amet neque a, viverra congue ligula. \
+            Maecenas in porta ligula. Nam lobortis commodo diam, id ultrices libero ullamcorper aliquam. \
+            Quisque consectetur leo ante, id tincidunt erat semper sit amet. In pellentesque feugiat iaculis. \
+            Ut sit amet ante facilisis, auctor neque a, tincidunt libero. Pellentesque ut varius lorem, in luctus sapien. \
+            Praesent ullamcorper ante eget magna maximus accumsan. ')
+
+        post_save_button.click()
+
+        # He wants to check his other drafts first before he publishes, so clicks to homepage, then "drafts" button
+        self.browser.find_element_by_link_text("George's Blog").click()
+        self.browser.find_element_by_id('post_drafts_button').click()
+        self.browser.find_element_by_link_text('Lorem Ipsum').click()
+
+        # He notices a missing line to add before publishing
+        self.browser.find_element_by_id('post_edit').click()
+
+        newpost_title = self.browser.find_element_by_id('id_title')
+        newpost_text = self.browser.find_element_by_id('id_text')
+        post_save_button = self.browser.find_element_by_id('save_post')
+
+        newpost_text.send_keys(' This is my missing line!')
+        post_save_button.click()
+
+        # He happily publishes his new blogpost!
+        self.browser.find_element_by_id('post_publish').click()
         time.sleep(5)
-        # Upon returning to the home page, he finds some new buttons available to him
+        
         
 
         # He presses the new blog post button and finds a post submission form
