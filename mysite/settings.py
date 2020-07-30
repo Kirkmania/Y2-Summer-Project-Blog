@@ -123,3 +123,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Redirect successful login to top-level index (homepage)
 LOGIN_REDIRECT_URL = '/'
+
+# Redirect successful logOUT to top-level index
+LOGOUT_REDIRECT_URL = '/'

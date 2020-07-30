@@ -1,17 +1,19 @@
-from django.test import LiveServerTestCase, Client
+from django.test import Client #, LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.auth.models import Group, User
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
-from blog.models import Post
+from blog.models import Post, Comment
 from django.utils import timezone
 import time
 #import unittest
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
+        self.browser.implicitly_wait(5)
 
         #create permissions group
         self.group_admin = Group(name="admin")
@@ -20,20 +22,41 @@ class NewVisitorTest(LiveServerTestCase):
         self.group_newcomer.save()
 
         self.user_admin = User.objects.create_superuser(
-            username='test',
-            password='test',
+            username='Hipster',
+            password='starbucks',
             email='test@test.com',
         )
 
-        test = Post.objects.create(author=self.user_admin, title="Hipster Ipsum", text="I'm baby glossier pug gastropub yr woke photo booth.\
+        self.user = User.objects.create_user(
+            username='Kassandra',
+            password='malaka',
+            email='test1@test1.com',
+        )
+
+        self.user_admin.groups.add(self.group_admin)
+        self.user.groups.add(self.group_newcomer)
+
+        post = Post.objects.create(author=self.user_admin, title="Hipster Ipsum", text="I'm baby glossier pug gastropub yr woke photo booth.\
              Whatever umami enamel pin synth organic art party raw denim church-key. Jianbing lyft selvage pabst, \
             poutine ugh four dollar toast. Kale chips umami thundercats man bun street art truffaut pork belly mixtape distillery hoodie polaroid occupy. \
             Vegan tacos occupy ethical, craft beer master cleanse crucifix tbh banh mi sartorial activated charcoal snackwave.",
         created_date="2020-07-28 20:50", published_date="2020-07-28 20:51")
-        test.save()
 
-        self.user_admin.groups.add(self.group_admin)
+        comment_approved = Comment.objects.create(post=post,
+            author=self.user_admin,
+            text="Does this work??",
+            created_date="2020-07-28 20:51",
+            approved_comment=True)
 
+        comment = Comment.objects.create(post=post,
+            author=self.user,
+            text="I've HAD it with those damn Kosmos Cultists!!",
+            created_date="0001-05-23 18:38")
+
+        post.save()
+
+
+        
     def tearDown(self):
         self.browser.quit()
 
@@ -44,6 +67,7 @@ class NewVisitorTest(LiveServerTestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
     
+    ### Test Number 1 ###
     def test_user_can_see_blog_posts_and_signup(self):
         # George has started along the Way of the Testing Goat and
         # pretends to check out a new blog
@@ -58,8 +82,6 @@ class NewVisitorTest(LiveServerTestCase):
         signup_button = self.browser.find_element_by_id('signup_button')
         signup_button.click()
 
-        time.sleep(1)  #NOTE REPLACE VODOO SLEEPS!
-
         # He enters his username and password, confirming his new account
         signup_username = self.browser.find_element_by_id('id_username')
         signup_password1 = self.browser.find_element_by_id('id_password1')
@@ -71,32 +93,30 @@ class NewVisitorTest(LiveServerTestCase):
         signup_password2.send_keys('DjangoTest123')
         signup_submit_button.click()
 
-        time.sleep(3) #NOTE REPLACE VOODOO SLEEPS!
-        self.fail('Is this the end?!')
+        # time.sleep(1) #NOTE REPLACE VOODOO SLEEPS!
 
-        #NOTE NEED TO ADD A POST BEFORE THIS!
-        # After submitting his signup he returns to the homepage and sees the latest post
-        post_text = self.browser.find_element_by_class_name('post').text
-        self.assertIn('Hello yes I am blog continue', post_text, 'this probably wont work')
+        # After signing up he is redirected to the homepage and sees the latest post
+        post = self.browser.find_element_by_class_name('post')
+        # self.assertIn("baby glossier pug gastropub", [post.text for post in posts]) doesn't work for some reason?
+        self.assertIn("baby glossier pug gastropub", post.text)
+        time.sleep(10)
 
-
+    ### Test Number 2 ###
     def test_admin_user_can_create_and_view_posts(self):
         self.browser.get(self.live_server_url)
 
+        # Mr admin user wants to log in to the site
         login_button = self.browser.find_element_by_id('login_button')
         login_button.click()
-
-        time.sleep(1)
-
+        
+        # He enters his username, password and hits submit
         login_username = self.browser.find_element_by_id('id_username')
         login_password = self.browser.find_element_by_id('id_password')
-        signup_submit_button = self.browser.find_element_by_id('login_submit')
+        login_submit_button = self.browser.find_element_by_id('login_submit')
 
-        login_username.send_keys('test')
-        login_password.send_keys('test')
-        signup_submit_button.click()
-
-        time.sleep(1)
+        login_username.send_keys('Hipster')
+        login_password.send_keys('starbucks')
+        login_submit_button.click()
 
         # Upon returning to the home page, he clicks the new "new post" button and writes a blog post
         self.browser.find_element_by_id('post_new_button').click()
@@ -118,7 +138,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         post_save_button.click()
 
-        # He wants to check his other drafts first before he publishes, so clicks to homepage, then "drafts" button
+        # He wants to check his other drafts first before he publishes, so clicks back to homepage, then "drafts" button
         self.browser.find_element_by_link_text("George's Blog").click()
         self.browser.find_element_by_id('post_drafts_button').click()
         self.browser.find_element_by_link_text('Lorem Ipsum').click()
@@ -133,6 +153,10 @@ class NewVisitorTest(LiveServerTestCase):
         newpost_text.send_keys(' This is my missing line!')
         post_save_button.click()
 
+        # Missing line has been added
+        edited_post = Post.objects.get(title="Lorem Ipsum")
+        self.assertIn("This is my missing line!", edited_post.text)
+
         # He happily publishes his new blogpost!
         self.browser.find_element_by_id('post_publish').click()
         published_post = Post.objects.get(title="Lorem Ipsum")
@@ -140,45 +164,60 @@ class NewVisitorTest(LiveServerTestCase):
 
         # The post is now visible from the homepage blog post list
         self.browser.find_element_by_link_text("George's Blog").click()
+        body_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn("Lorem Ipsum", body_text)
 
+    def test_user_can_view_and_admin_moderate_comments(self):
+        self.browser.get(self.live_server_url)
 
-        # NOTE FINISH THE STORY!
+        # Mr admin user logs in to the site
+        login_button = self.browser.find_element_by_id('login_button')
+        login_button.click()
+        
+        # He enters his username, password and hits submit
+        login_username = self.browser.find_element_by_id('id_username')
+        login_password = self.browser.find_element_by_id('id_password')
+        login_submit_button = self.browser.find_element_by_id('login_submit')
 
-#################################################################################################################### OLD STUFF
-        # inputbox = self.browser.find_element_by_id('id_new_item')
-        # self.assertEqual(
-        #     inputbox.get_attribute('placeholder'),
-        #     'Enter a to-do item'
-        # )
+        login_username.send_keys('Hipster')
+        login_password.send_keys('starbucks')
+        login_submit_button.click()
 
-        # # He types "Play more Call of Duty" into a text box
-        # inputbox.send_keys('Play more Call of Duty')
+        # Back at the homepage, he checks out the latest post's comments
+        self.browser.find_element_by_link_text("Hipster Ipsum").click()
+        comments = self.browser.find_elements_by_class_name("comment")
+        self.assertIn("Does this work??", comments[0].text)
 
-        # # When he hits enter, the page updates, and now the page lists
-        # # "1: Play more Call of Duty" as an item in a to-do list NOTE: Cool stuff used to be here. f-string and any() function
-        # inputbox.send_keys(Keys.ENTER)
-        # time.sleep(1)
-        # self.check_for_row_in_list_table('1: Play more Call of Duty')
+        # He sees an new (very old) comment from Kassandra the assassin, which he approves
+        self.assertIn("Kassandra", comments[1].text)
+        self.browser.find_element_by_id("comment_approve").click()
 
-        # # There is still a text box inviting him to to add another item.
-        # # He enters "Make the blog look prettier"
-        # inputbox = self.browser.find_element_by_id('id_new_item')
-        # inputbox.send_keys('Make the blog look prettier')
-        # inputbox.send_keys(Keys.ENTER)
-        # time.sleep(1)
+        # Finally, let's try adding a new comment
+        self.browser.find_element_by_id("comment_add").click()
+        self.browser.find_element_by_id("id_author").send_keys('Hipster')
+        self.browser.find_element_by_id("id_text").send_keys('MAN do I love my frapp-omegaccino with extra zest!')
+        self.browser.find_element_by_id("comment_submit").click()
+        self.browser.find_element_by_id("comment_approve").click()
 
-        # # The page updates again, and now shows both items on her list
-        # self.check_for_row_in_list_table('1: Play more Call of Duty')
-        # self.check_for_row_in_list_table('2: Make the blog look prettier')
+        # Let's just make sure a non-admin user can see the comments!
+        self.browser.find_element_by_link_text("Log out").click()
+        
+        login_button = self.browser.find_element_by_id('login_button')
+        login_button.click()
+        login_username = self.browser.find_element_by_id('id_username')
+        login_password = self.browser.find_element_by_id('id_password')
+        login_submit_button = self.browser.find_element_by_id('login_submit')
+        login_username.send_keys('Kassandra')
+        login_password.send_keys('malaka')
+        login_submit_button.click()
 
-        # # George wonders whether the site will remember his list. Then he sees
-        # # that the site has generated a unique URL for him, with some explanatory
-        # # text to that effect.
-        # self.fail('Finish the test!')
+        # Is the new comment visible?
+        self.browser.find_element_by_link_text("Hipster Ipsum").click()
+        comments = self.browser.find_elements_by_class_name("comment")
+        self.assertIn("Kosmos Cultists", comments[1].text)
 
-        # # He visits that URL, his to-do list is still there.
-
-        # # Satisfied, he goes back to sleep.
+        # Admin's comment should also be visible
+        self.assertIn("frapp-omegaccino", comments[2].text)
 
 # if __name__ == '__main__':
 #    unittest.main()             # Not needed anymore
