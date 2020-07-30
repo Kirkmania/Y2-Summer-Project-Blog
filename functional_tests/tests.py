@@ -4,13 +4,9 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
 from blog.models import Post
+from django.utils import timezone
 import time
 #import unittest
-
-########## NOTE DON'T KEEP ?? NOT LIVE SERVER CASE
-from django.test import override_settings
-@override_settings(DEBUG=True)
-
 
 class NewVisitorTest(LiveServerTestCase):
 
@@ -83,6 +79,7 @@ class NewVisitorTest(LiveServerTestCase):
         post_text = self.browser.find_element_by_class_name('post').text
         self.assertIn('Hello yes I am blog continue', post_text, 'this probably wont work')
 
+
     def test_admin_user_can_create_and_view_posts(self):
         self.browser.get(self.live_server_url)
 
@@ -138,22 +135,14 @@ class NewVisitorTest(LiveServerTestCase):
 
         # He happily publishes his new blogpost!
         self.browser.find_element_by_id('post_publish').click()
-        time.sleep(5)
-        
-        
-
-        # He presses the new blog post button and finds a post submission form
-
-        # He fills in his post details and saves it as a draft
-
-        # Refreshing the page (?) he sees a publish button which he presses
+        published_post = Post.objects.get(title="Lorem Ipsum")
+        self.assertIsNotNone(published_post.published_date)
 
         # The post is now visible from the homepage blog post list
+        self.browser.find_element_by_link_text("George's Blog").click()
+
 
         # NOTE FINISH THE STORY!
-
-        # NOTE INCLUDE THIS LATER! He is invited to enter a to-do item pronto
-
 
 #################################################################################################################### OLD STUFF
         # inputbox = self.browser.find_element_by_id('id_new_item')
