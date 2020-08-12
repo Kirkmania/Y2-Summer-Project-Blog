@@ -93,13 +93,10 @@ class NewVisitorTest(StaticLiveServerTestCase):
         signup_password2.send_keys('DjangoTest123')
         signup_submit_button.click()
 
-        # time.sleep(1) #NOTE REPLACE VOODOO SLEEPS!
-
         # After signing up he is redirected to the homepage and sees the latest post
         post = self.browser.find_element_by_class_name('post')
         # self.assertIn("baby glossier pug gastropub", [post.text for post in posts]) doesn't work for some reason?
         self.assertIn("baby glossier pug gastropub", post.text)
-        time.sleep(10)
 
     ### Test Number 2 ###
     def test_admin_user_can_create_and_view_posts(self):
@@ -110,8 +107,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         login_button.click()
         
         # He enters his username, password and hits submit
-        login_username = self.browser.find_element_by_id('id_username')
-        login_password = self.browser.find_element_by_id('id_password')
+        login_username = self.browser.find_element_by_id('login_username')
+        login_password = self.browser.find_element_by_id('login_password')
         login_submit_button = self.browser.find_element_by_id('login_submit')
 
         login_username.send_keys('Hipster')
@@ -122,11 +119,14 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('post_new_button').click()
 
         newpost_title = self.browser.find_element_by_id('id_title')
-        newpost_text = self.browser.find_element_by_id('id_text')
-        post_save_button = self.browser.find_element_by_id('save_post')
-
         newpost_title.send_keys('Lorem Ipsum')  # Hey cool, this \ thing lets you overflow strings in python!
-        newpost_text.send_keys('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac ex ante. \
+        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
+        newpost_richtext = self.browser.find_element_by_class_name("cke_editable")
+        #newpost_text = self.browser.find_element_by_id('id_text')
+        #post_save_button = self.browser.find_element_by_id('save_post')
+
+
+        newpost_richtext.send_keys('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac ex ante. \
             Nullam iaculis fermentum tortor, non suscipit elit aliquet quis. Donec consequat placerat accumsan. \
             Praesent et ante non mi finibus pellentesque sed eget metus. In posuere, massa vel aliquet elementum, \
             metus nisi interdum tellus, in accumsan sapien ex vitae neque. Aliquam viverra in magna vitae fringilla. \
@@ -135,7 +135,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
             Quisque consectetur leo ante, id tincidunt erat semper sit amet. In pellentesque feugiat iaculis. \
             Ut sit amet ante facilisis, auctor neque a, tincidunt libero. Pellentesque ut varius lorem, in luctus sapien. \
             Praesent ullamcorper ante eget magna maximus accumsan. ')
-
+        self.browser.switch_to_default_content()
+        post_save_button = self.browser.find_element_by_id('save_post')
         post_save_button.click()
 
         # He wants to check his other drafts first before he publishes, so clicks back to homepage, then "drafts" button
@@ -146,11 +147,12 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # He notices a missing line to add before publishing
         self.browser.find_element_by_id('post_edit').click()
 
-        newpost_title = self.browser.find_element_by_id('id_title')
-        newpost_text = self.browser.find_element_by_id('id_text')
+        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
+        newpost_richtext = self.browser.find_element_by_class_name("cke_editable")
+        
+        newpost_richtext.send_keys(' This is my missing line!')
+        self.browser.switch_to_default_content()
         post_save_button = self.browser.find_element_by_id('save_post')
-
-        newpost_text.send_keys(' This is my missing line!')
         post_save_button.click()
 
         # Missing line has been added
@@ -175,8 +177,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         login_button.click()
         
         # He enters his username, password and hits submit
-        login_username = self.browser.find_element_by_id('id_username')
-        login_password = self.browser.find_element_by_id('id_password')
+        login_username = self.browser.find_element_by_id('login_username')
+        login_password = self.browser.find_element_by_id('login_password')
         login_submit_button = self.browser.find_element_by_id('login_submit')
 
         login_username.send_keys('Hipster')
@@ -204,8 +206,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         
         login_button = self.browser.find_element_by_id('login_button')
         login_button.click()
-        login_username = self.browser.find_element_by_id('id_username')
-        login_password = self.browser.find_element_by_id('id_password')
+        login_username = self.browser.find_element_by_id('login_username')
+        login_password = self.browser.find_element_by_id('login_password')
         login_submit_button = self.browser.find_element_by_id('login_submit')
         login_username.send_keys('Kassandra')
         login_password.send_keys('malaka')

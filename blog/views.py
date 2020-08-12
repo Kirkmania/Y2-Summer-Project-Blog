@@ -11,7 +11,7 @@ from .decorators import unauthenticated_user, allowed_users
 # Create your views here.
 # NOTE: My first view creation :o
 def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
     return render(request, 'blog/post_list.html', {'posts': posts})
 
 # Must make sure the extra arg has the EXACT same name as in urls.py. Is this django-only? Or python?
@@ -102,25 +102,6 @@ def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('post_detail', pk=comment.post.pk)
-
-@unauthenticated_user                                   #NOTE custom decorator made in decorators.py
-def signup(request):                                  
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password')
-            user1 = authenticate(username=username, password=raw_password)
-
-            group = Group.objects.get(name='newcomer')
-            user.groups.add(group)
-
-            login(request, user)
-            return redirect('post_list')
-    else:
-        form = UserCreationForm()
-    return render(request, 'blog/signup.html', {'form': form})
 
 def cv(request):
     form = CVForm()

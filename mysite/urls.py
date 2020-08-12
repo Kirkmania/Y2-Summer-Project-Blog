@@ -21,7 +21,7 @@ from blog import views as blog_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/login/', views.LoginView.as_view(), name='login'),   # for login page
-    path('accounts/logout/', views.LogoutView.as_view(), name='logout'),
     path('', include('blog.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('accounts.urls')),
 ]

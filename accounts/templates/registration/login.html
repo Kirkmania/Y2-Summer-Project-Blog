@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+  George's Blog - Login
+{% endblock %}
+
+{% block content %}
+  <h2>Login...</h2>
+  <small id="login_new_user" class="form-text text-muted">Don't have an account? <a href="{% url 'register' %}"">Sign up here.</a></small>
+	<form method="POST">{% csrf_token %}
+    
+    <div class="form-group">
+      <input type="text" class="form-control" id="login_username" name="username" placeholder="Username">
+      
+    </div>
+
+    <div class="form-group">
+      <input type="password" class="form-control" id="login_password" name="password" placeholder="Password">
+    </div>
+
+		<button type="submit" class="btn btn-secondary" id="login_submit">Login</button>
+	</form>
+{% endblock %}

@@ -6,8 +6,11 @@
 
 {% block content %}
 	<h2>New Post</h2>
-	<form method="POST" class="post-form">{% csrf_token %}
-		{{ form.as_p }}
-		<button id="save_post" type="submit" class="btn btn-secondary" >Save</button>
-	</form>
+	<div class="form-group">
+		<form method="POST" class="post-form">{% csrf_token %}
+			{{ form.media }}
+			{{ form.as_p }}
+			<button id="save_post" type="submit" class="btn btn-secondary" >Save</button>
+		</form>
+	</div>
 {% endblock %}
