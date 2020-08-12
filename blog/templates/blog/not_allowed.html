@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <h3>You are not allowed to view this page!</h3>
+  <p>How'd you sneak in here? ;)</p>
+  <p>If you somehow arrived here by accident, your account does not have permission to view this page.
+  Click <a href="/">here</a> to return to the homepage, or click "Log out" and sign into a different account.</p>
+  {{ perms.blog }}
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', views.post_list, name='post_list'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('comment/<int:pk>/approve/', views.comment_approve, name='comment_approve'),
     path('comment/<int:pk>/remove/', views.comment_remove, name='comment_remove'),
     path('cv/', views.cv, name='cv'), #testing
+    path('not_allowed!/', TemplateView.as_view(template_name='blog/not_allowed.html'), name='not_allowed'),
 ]
