@@ -1,5 +1,9 @@
 {% extends "blog/base.html" %}
 
+{% block title %}
+  George's Blog - Login
+{% endblock %}
+
 {% block content %}
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>

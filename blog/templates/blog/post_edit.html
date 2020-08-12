@@ -1,9 +1,13 @@
 {% extends 'blog/base.html' %}
 
+{% block title %}
+  George's Blog - Edit a new post
+{% endblock %}
+
 {% block content %}
-    <h2>New Post</h2>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        <button id="save_post" type="submit" class="save btn btn-default" >Save</button>
-    </form>
+	<h2>New Post</h2>
+	<form method="POST" class="post-form">{% csrf_token %}
+		{{ form.as_p }}
+		<button id="save_post" type="submit" class="btn btn-secondary" >Save</button>
+	</form>
 {% endblock %}

@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from .models import Post, Comment
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, CVForm
 from .decorators import unauthenticated_user, allowed_users
 
 # Create your views here.
@@ -121,3 +121,7 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'blog/signup.html', {'form': form})
+
+def cv(request):
+    form = CVForm()
+    return render(request, 'blog/cv.html', {'form': form})

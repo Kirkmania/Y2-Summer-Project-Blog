@@ -1,0 +1,10 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+	<h1>New CV</h1>
+	<form method="POST" class="post-form">{% csrf_token %}
+		{{ form.media }}
+		{{ form.as_p }}
+		<button type="save" class="save btn btn-primary" id="cv_save">Send</button>
+	</form>
+{% endblock %}

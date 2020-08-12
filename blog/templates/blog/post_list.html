@@ -1,16 +1,16 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}         <!-- this injects the html block into the content block in base.html. -->
-    {% for post in posts %}
-        <div class="post">
-            <div class="date">
-                published: {{ post.published_date }}
-            </div>          <!-- pk means primary key, default auto generated and accessed by post.pk-->
-                            <!-- url 'post_detail' expects to match a url in urls.py-->
-            <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
-            <p>{{ post.text|linebreaksbr }}</p>
-            <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
-            <hr>
-        </div>
-    {% endfor %}
+	{% for post in posts %}
+		<div class="post">
+			<div class="date">
+				published: {{ post.published_date }}
+			</div>          <!-- pk means primary key, default auto generated and accessed by post.pk-->
+											<!-- url 'post_detail' expects to match a url in urls.py-->
+			<h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+			<p>{{ post.text|linebreaksbr }}</p>
+			<a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
+			<hr>
+		</div>
+	{% endfor %}
 {% endblock %}

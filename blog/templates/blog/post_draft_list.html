@@ -1,13 +1,17 @@
 {% extends 'blog/base.html' %}
 
+{% block title %}
+  George's Blog - Draft posts list
+{% endblock %}
+
 {% block content %}
-    {% for post in posts %}
-    <div class="post">
-        <div class="date">
-            <p class="date">created: {{ post.created_date|date:'d-m-Y' }}</p>
-            <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
-            <p>{{ post.text|truncatechars:200 }}</p>
-        </div>
-    </div>
-    {% endfor %}
+	{% for post in posts %}
+	<div class="post">
+		<div class="date">
+			<p class="date">created: {{ post.created_date|date:'d-m-Y' }}</p>
+			<h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+			<p>{{ post.text|truncatechars:200 }}</p>
+		</div>
+	</div>
+	{% endfor %}
 {% endblock %}
