@@ -52,6 +52,12 @@
             </ul>
             <ul class="navbar-nav">
               {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'post_new' %}">New Post</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'post_draft_list' %}">View Drafts</a>
+              </li>
                 <li class="nav-item active">
                   <a class="nav-link" href="{% url 'logout' %}">Log out</a>
                 </li>
