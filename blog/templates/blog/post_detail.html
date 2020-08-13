@@ -15,21 +15,23 @@
       <a class="btn btn-secondary" href ="{% url 'post_publish' pk=post.pk %}" id="post_publish">Publish</a>
     {% endif %}
     <h2>{{ post.title }}
-      {% if user.is_staff %}                  <!--CHANGED from user.is_authenticated to user.is_staff -->
+      {% if perms.blog.manage_posts %}                <!--CHANGED from user.is_authenticated to user.is_staff -->
         <a class="btn btn-secondary" href="{% url 'post_edit' pk=post.pk %}" id="post_edit"><i class="fas fa-edit"></i></a>
         <a class="btn btn-secondary" href="{% url 'post_remove' pk=post.pk %}" id="post_remove"><i class="fas fa-trash"></i></a>
       {% endif %}
     </h2>
-    <p>{{ post.text|linebreaksbr }}</p>
+    <p>{{ post.text|safe }}</p>
   </div>
 
   <hr>
   <a class="btn btn-secondary" href="{% url 'add_comment_to_post' pk=post.pk %}" id="comment_add">Add comment</a>
   {% for comment in post.comments.all %}
-    {% if user.is_staff or comment.approved_comment %}      <!--maybe change later? or learn more about attributes-->
+    {% if perms.comment.manage_comments or comment.approved_comment %}      <!--maybe change later? or learn more about attributes-->
       <div class="comment">
         <div class="date">
+          <small>
           {{ comment.created_date }}
+        </small>
           {% if not comment.approved_comment %}
             <a class="btn btn-secondary" href="{% url 'comment_remove' pk=comment.pk %}" id="comment_remove"><i class="fas fa-trash"></i></a>
             <a class="btn btn-secondary" href="{% url 'comment_approve' pk=comment.pk %}" id="comment_approve"><i class="fas fa-check"></i></a>

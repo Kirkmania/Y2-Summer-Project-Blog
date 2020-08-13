@@ -18,6 +18,8 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
   </head>
+
+  
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <a class="navbar-brand" href="/">George's Blog</a>
@@ -27,66 +29,46 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/"><i class="fas fa-home"></i> Home <span class="sr-only">(current)</span></a>
                 </li>
                 {% if perms.blog.manage_posts %}
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'post_new' %}">New Post</a>
+                    <a class="nav-link" href="{% url 'post_new' %}"><i class="fas fa-edit"></i> New Post</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'post_draft_list' %}">View Drafts</a>
+                    <a class="nav-link" href="{% url 'post_draft_list' %}"><i class="fas fa-file"></i> View Drafts</a>
                   </li>
                 {% endif %}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                  </div>
-                </li>
                 <li class="nav-item">
                   <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
               {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'post_new' %}">New Post</a>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-user"></i> {{ user.username|title }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Log out</a>
+                </div>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'post_draft_list' %}">View Drafts</a>
-              </li>
-                <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'logout' %}">Log out</a>
-                </li>
               {% else %}
                 <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    <a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Register</a>
                 </li>
               {% endif %}
             </ul>
         </div>
     </nav>
-    <div class="page-header">
-      {% if user.is_authenticated %}
-        {% if request.user.is_staff %}
-          <a href= "{% url 'post_new' %}" class="top-menu" id="post_new_button"><i class="fas fa-edit"></i></a>
-          <a href= "{% url 'post_draft_list' %}" class = "top-menu" id="post_drafts_button"><span class="fas fa-file"></span></a>
-        {% endif %}
-        <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
-      {% else %}
-        <a href="{%url 'login' %}" class="top-menu" id="login_button"><i class="fas fa-sign-in-alt"></i></a>
-        <a href="{%url 'register' %}" class="top-menu" id="signup_button"><i class="fas fa-user-plus"></i></a>
-      {% endif %}
-      <h1><a href="/">George's Blog</a></h1>
-    </div>
+    
+  </br>
 
     <div class="content container">
       <div class="row">           
