@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}  
+
+{% if category_posts %}
+  <h1>{{ category }} Posts</h1>
+  {% for post in category_posts %}
+    <div class="post">
+        <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+        <div class="date">
+          <small>published: {{ post.published_date }}</small>
+      </div> 
+        <p>{{ post.text|slice:":200"|safe }}...</p>
+        <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
+        <hr>
+    </div>
+  {% endfor %}
+{% else %}
+  <h2>Sorry, this category does not exist...</h2>
+{% endif %}
+
+{% endblock %}

@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
 from django.utils import timezone
-from .models import Post, Comment
+from django.views.generic import ListView, DetailView, CreateView
+from .models import Post, Comment, Category, CV
 from .forms import PostForm, CommentForm, CVForm
 from .decorators import unauthenticated_user, allowed_users
 
@@ -34,6 +35,14 @@ def post_new(request):
     else:
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
+
+# Alternative postnew view! NOTE: NOT IN USE
+class AddPostView(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/post_edit.html'
+    #fields = '__all__'
+    #fields = ('title', 'text')
 
 # Edit existing post page
 @login_required
@@ -102,6 +111,16 @@ def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('post_detail', pk=comment.post.pk)
+
+# Add category NOTE: TRYING OUT CLASS VIEWS
+class AddCategoryView(CreateView):
+    model = Category
+    template_name = 'blog/add_category.html'
+    fields = '__all__'
+
+def category_view(request, category):
+    category_posts = Post.objects.filter(category=category)
+    return render(request, 'blog/categories.html', {'category': category, 'category_posts':category_posts})
 
 def cv(request):
     form = CVForm()

@@ -7,7 +7,7 @@
                             <!-- url 'post_detail' expects to match a url in urls.py-->
 						<h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
 						<div class="date">
-							<small>published: {{ post.published_date }}</small>
+							<small><a href="{% url 'category' post.category%}">{{ post.category }}</a> | published: {{ post.published_date }}</small>
 					</div> 
             <p>{{ post.text|slice:":200"|safe }}...</p>
             <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
