@@ -119,8 +119,8 @@ class AddCategoryView(CreateView):
     fields = '__all__'
 
 def category_view(request, category):
-    category_posts = Post.objects.filter(category=category)
-    return render(request, 'blog/categories.html', {'category': category, 'category_posts':category_posts})
+    category_posts = Post.objects.filter(category__iexact=category.replace('-', ' '))
+    return render(request, 'blog/categories.html', {'category': category.title().replace('-', ' '), 'category_posts':category_posts})
 
 def cv(request):
     form = CVForm()
