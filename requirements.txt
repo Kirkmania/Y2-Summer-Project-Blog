@@ -1,2 +1,2 @@
 Django~=2.2.4
-django-ckeditor~=4.13.1
+django-ckeditor
