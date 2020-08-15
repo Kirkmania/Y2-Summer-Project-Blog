@@ -9,3 +9,4 @@ geckodriver.log
 /static
 .DS_Store
 Django Girls Workspace.code-workspace
+todo.txt
