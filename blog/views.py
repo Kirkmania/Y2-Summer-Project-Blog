@@ -13,21 +13,24 @@ from .decorators import unauthenticated_user, allowed_users
 # NOTE: My first view creation :o
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-    return render(request, 'blog/post_list.html', {'posts': posts})
+
+    category_menu = Category.objects.all()
+    return render(request, 'blog/post_list.html', {'posts': posts, 'category_menu': category_menu})
 
 # Must make sure the extra arg has the EXACT same name as in urls.py. Is this django-only? Or python?
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
+    category_menu = Category.objects.all()
+    return render(request, 'blog/post_detail.html', {'post': post, 'category_menu': category_menu})
 
 # New post form page
 @login_required
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'author'])
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
-            post = form.save(commit=False) # Usually commit is true, but in this case we want to add author THEN save!
+            post = form.save(commit=False) # Default commit is true, but in this case we want to add author THEN save!
             post.author = request.user
             # post.published_date = timezone.now()          # removed to separate drafting and publishing
             post.save()
@@ -46,20 +49,23 @@ class AddPostView(CreateView):
 
 # Edit existing post page
 @login_required
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'author'])
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            # post.published_date = timezone.now()          # removed to separate drafting and publishing 
-            post.save()
-            return redirect('post_detail', pk=post.pk)
+    if request.user == post.author or request.user.groups.filter(name='admin').exists():
+        if request.method == "POST":
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                # post.published_date = timezone.now()          # removed to separate drafting and publishing 
+                post.save()
+                return redirect('post_detail', pk=post.pk)
+        else:
+            form = PostForm(instance=post)
+        return render(request, 'blog/post_edit.html', {'form': form})
     else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+        return redirect('invalid_author', pk=post.pk)
 
 # Show unpublished posts
 @login_required
@@ -70,7 +76,7 @@ def post_draft_list(request):
 
 # Publish draft post
 @login_required
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'author'])
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
@@ -78,11 +84,15 @@ def post_publish(request, pk):
 
 # Delete existing post
 @login_required
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'author'])
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()                           # Model.delete is standard django method.
     return redirect('post_list')
+
+def post_invalid_author(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'blog/invalid_author.html', {'post': post})
 
 # Add comment to post           TODO: If user is logged in, change form such that name field not required
 def add_comment_to_post(request, pk):
@@ -120,7 +130,8 @@ class AddCategoryView(CreateView):
 
 def category_view(request, category):
     category_posts = Post.objects.filter(category__iexact=category.replace('-', ' '))
-    return render(request, 'blog/categories.html', {'category': category.title().replace('-', ' '), 'category_posts':category_posts})
+    category_menu = Category.objects.all()
+    return render(request, 'blog/categories.html', {'category': category.title().replace('-', ' '), 'category_posts':category_posts, 'category_menu': category_menu})
 
 def cv(request):
     form = CVForm()

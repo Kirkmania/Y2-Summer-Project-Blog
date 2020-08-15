@@ -1,17 +1,18 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}         <!-- this injects the html block into the content block in base.html. -->
-    {% for post in posts %}
-        <div class="post">
-         <!-- pk means primary key, default auto generated and accessed by post.pk-->
-                            <!-- url 'post_detail' expects to match a url in urls.py-->
-						<h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
-						<div class="date">
-							<small><a href="{% url 'category' post.category|slugify %}">{{ post.category }}</a> | published: {{ post.published_date }}</small>
-					</div> 
-            <p>{{ post.text|slice:":200"|safe }}...</p>
-            <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
-            <hr>
-        </div>
+  {% for post in posts %}
+    <div class="post">
+    <!-- pk means primary key, default auto generated and accessed by post.pk-->
+    <!-- url 'post_detail' expects to match a url in urls.py-->
+			<h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+			<div class="date">
+				<small><a href="{% url 'category' post.category|slugify %}">{{ post.category }}</a> | 
+					{{ post.author.first_name }} {{ post.author.last_name}} | Published: {{ post.published_date }}</small>
+			</div> 
+        <p>{{ post.text|slice:":200"|safe }}...</p>
+        <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
+        <hr>
+      </div>
     {% endfor %}
 {% endblock %}

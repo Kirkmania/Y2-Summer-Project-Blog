@@ -5,12 +5,16 @@
 {% endblock %}
 
 {% block content %}
+	{% if perms.post.manage_posts %}
 	<h2>New Category</h2>
 	<div class="form-group">
 		<form method="POST" class="post-form">{% csrf_token %}
-			{{ form.media }}
-			{{ form.as_p }}
+			<input type="text" class="form-control" name="name" maxlength="255" required="" id="id_name" placeholder="Category Name">
+		</br>
 			<button id="save_post" type="submit" class="btn btn-secondary" >Add Category</button>
 		</form>
 	</div>
+	{% else %}
+	You are not allowed to do this action!
+	{% endif %}
 {% endblock %}

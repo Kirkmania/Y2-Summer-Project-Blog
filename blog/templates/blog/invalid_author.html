@@ -1,0 +1,11 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+  George's Blog: Invalid Author
+{% endblock %}
+
+{% block content %}
+  <h3>You are not the author of this post!</h3>
+  <p>This post belongs to {{ post.author.first_name }} {{ post.author.last_name }} (username: {{ post.author }}).</p>
+  <p>Click <a href="/">here</a> to return to the homepage, or <a href="{% url 'logout' %}">log out</a> and try again with the correct account.</p>
+{% endblock %}

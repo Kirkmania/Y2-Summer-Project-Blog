@@ -31,26 +31,44 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/"><i class="fas fa-home"></i> Home <span class="sr-only">(current)</span></a>
                 </li>
+                <!-- Settings Dropdown -->
                 {% if perms.blog.manage_posts %}
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% url 'add_category' %}"><i class="fas fa-folder-plus"></i> Add Category</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#"><i class="fas fa-american-sign-language-interpreting"></i> Final option</a>
+                    </div>
+                  </li>
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'post_new' %}"><i class="fas fa-edit"></i> New Post</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'post_draft_list' %}"><i class="fas fa-file"></i> View Drafts</a>
                   </li>
-                
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-cog"></i> Settings
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'add_category' %}"><i class="fas fa-folder-plus"></i> Add Category</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i class="fas fa-american-sign-language-interpreting"></i> Final option</a>
-                  </div>
-                </li>
                 {% endif %}
+                <!-- Categories Dropdown -->
+                {% if category_menu %}
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-folder"></i> Categories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      {% for category in category_menu %}
+                        <a class="dropdown-item" href="{% url 'category' category|slugify %}">{{ category }}</a>
+                      {% endfor %}
+                      {% if perms.blog.manage_posts %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'add_category' %}"><i class="fas fa-folder-plus"></i> Add Category</a>
+                      {% endif %}
+                    </div>
+                  </li>
+                {% endif %}
+                <!-- NOTE: Not final -->
                 <li class="nav-item">
                   <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
@@ -85,8 +103,8 @@
     <div class="content container">
       <div class="row">           
         <div class="col-md-8">  
-          {% block content %} <!-- where the old for loop used to be in post_list.html -->
-          {% endblock %}      <!-- this is where we can inject blocks of html code from other files!-->
+          {% block content %} <!-- this is where we can inject blocks of html code from other files!-->
+          {% endblock %}      
         </div>
       </div>
     </div>
