@@ -19,6 +19,8 @@ from django.urls import path, include
 from django.contrib.auth import views
 from blog import views as blog_views
 
+handler403 = blog_views.handler403
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),

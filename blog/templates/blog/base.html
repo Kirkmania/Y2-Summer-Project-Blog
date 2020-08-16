@@ -1,4 +1,5 @@
 {% load static %}
+{% load blog_extras %}
 <html>
   <head>
     <title>
@@ -35,7 +36,7 @@
                 {% if perms.blog.manage_posts %}
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-cog"></i> Settings
+                      <i class="fas fa-cog"></i> Admin Settings
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                       <a class="dropdown-item" href="{% url 'add_category' %}"><i class="fas fa-folder-plus"></i> Add Category</a>
@@ -44,6 +45,8 @@
                       <a class="dropdown-item" href="#"><i class="fas fa-american-sign-language-interpreting"></i> Final option</a>
                     </div>
                   </li>
+                {% endif %}
+                {% if request.user|has_group:"author" or request.user|has_group:"admin" %}
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'post_new' %}"><i class="fas fa-edit"></i> New Post</a>
                   </li>
@@ -61,7 +64,7 @@
                       {% for category in category_menu %}
                         <a class="dropdown-item" href="{% url 'category' category|slugify %}">{{ category }}</a>
                       {% endfor %}
-                      {% if perms.blog.manage_posts %}
+                      {% if perms.blog.add_category %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'add_category' %}"><i class="fas fa-folder-plus"></i> Add Category</a>
                       {% endif %}

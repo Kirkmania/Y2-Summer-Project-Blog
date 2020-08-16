@@ -14,8 +14,13 @@
     <div class="post">
       <h2>{{ post.title }}    
       {% if perms.blog.manage_posts or user.id == post.author.id %}
+        <div class="btn-group" role="group" aria-label="post_actions_group">
         <a class="btn btn-secondary" href="{% url 'post_edit' pk=post.pk %}" id="post_edit"><i class="fas fa-edit"></i></a>
+        {% if not post.published_date %}
+          <a class="btn btn-secondary" href ="{% url 'post_publish' pk=post.pk %}" id="post_publish"><i class="fas fa-paper-plane"></i></a>
+        {% endif %}
         <a class="btn btn-secondary" href="{% url 'post_remove' pk=post.pk %}" id="post_remove"><i class="fas fa-trash"></i></a>
+      </div>
       {% endif %}</h2>
       
       {% if post.published_date %}
@@ -28,10 +33,9 @@
     </div>
     <hr>
     <a class="btn btn-secondary" href="{% url 'add_comment_to_post' pk=post.pk %}" id="comment_add">Add comment</a>
-    {% if not post.published_date %}
-    <a class="btn btn-secondary" href ="{% url 'post_publish' pk=post.pk %}" id="post_publish">Publish</a>
+
     <hr>
-    {% endif %}
+
     {% for comment in post.comments.all %}
       {% if perms.comment.manage_comments or comment.approved_comment %}      <!--maybe change later? or learn more about attributes-->
         <div class="comment">
@@ -40,8 +44,10 @@
             {{ comment.created_date }}
           </small>
             {% if not comment.approved_comment %}
+            <div class="btn-group" role="group" aria-label="Basic example">
               <a class="btn btn-secondary" href="{% url 'comment_remove' pk=comment.pk %}" id="comment_remove"><i class="fas fa-trash"></i></a>
               <a class="btn btn-secondary" href="{% url 'comment_approve' pk=comment.pk %}" id="comment_approve"><i class="fas fa-check"></i></a>
+            </div>
             {% endif %}
           </div>
           <strong>{{ comment.author }}</strong>

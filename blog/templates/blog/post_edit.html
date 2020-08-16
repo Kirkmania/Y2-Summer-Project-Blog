@@ -5,12 +5,13 @@
 {% endblock %}
 
 {% block content %}
-	<h2>New Post</h2>
-	<div class="form-group">
-		<form method="POST" class="post-form">{% csrf_token %}
-			{{ form.media }}
-			{{ form.as_p }}
-			<button id="save_post" type="submit" class="btn btn-secondary" >Save</button>
-		</form>
-	</div>
+<h2>New Post</h2>
+<div class="form-group">
+	<form method="POST" class="post-form">{% csrf_token %}
+		{{ form.media }}
+		{{ form.as_p }}
+		<button id="save_post" type="submit" class="btn btn-secondary">Save as draft</button>
+		<button id="save_publish_post" type="submit" name="save_and_publish" class="btn btn-secondary">Save and publish</button>
+	</form>
+</div>
 {% endblock %}
