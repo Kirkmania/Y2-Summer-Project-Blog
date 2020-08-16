@@ -49,11 +49,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.title
-
-######################
-class CV(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text=RichTextField(blank=True, null=True)
-    
-    def __str__(self):
-        return self.text

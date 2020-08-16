@@ -17,7 +17,6 @@ urlpatterns = [
     path('comment/<int:pk>/remove/', views.comment_remove, name='comment_remove'),
     path('category/add/', views.AddCategoryView.as_view(), name='add_category'),
     path('category/<str:category>', views.category_view, name='category'),
-    path('cv/', views.cv, name='cv'), #testing
     path('not_allowed!/', TemplateView.as_view(template_name='blog/not_allowed.html'), name='not_allowed'),
     path('post/<int:pk>/invalid_author', views.post_invalid_author, name='invalid_author')
 ]

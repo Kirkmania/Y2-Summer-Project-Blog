@@ -6,8 +6,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Post, Comment, Category, CV
-from .forms import PostForm, CommentForm, CVForm
+from .models import Post, Comment, Category
+from .forms import PostForm, CommentForm
 from .decorators import unauthenticated_user, allowed_users
 
 # Create your views here.
@@ -146,10 +146,6 @@ def category_view(request, category):
     category_posts = Post.objects.filter(category__iexact=category.replace('-', ' '))
     category_menu = Category.objects.all()
     return render(request, 'blog/categories.html', {'category': category.title().replace('-', ' '), 'category_posts': category_posts, 'category_menu': category_menu})
-
-def cv(request):
-    form = CVForm()
-    return render(request, 'blog/cv.html', {'form': form})
 
 def handler403(request, exception):
     return render(request, '403.html')

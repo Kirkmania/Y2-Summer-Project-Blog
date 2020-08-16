@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post, Comment, CV, Category
+from .models import Post, Comment, Category
 
 #choices = [('programming', 'Programming'), ('technology', 'Technology'), ('gaming', 'Gaming')]
 
@@ -24,9 +24,3 @@ class CommentForm(forms.ModelForm):
             'author': forms.TextInput(attrs={'class': 'form-control'}),
             'text': forms.Textarea(attrs={'class': 'form-control'}),
         }
-
-class CVForm(forms.ModelForm):
-
-    class Meta:
-        model = CV
-        fields = ('text',)

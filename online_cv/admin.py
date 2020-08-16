@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, Category    #import our post model we made
+from .models import Post, Comment, CV, Category    #import our post model we made
 from django.contrib.auth.models import Permission
 
 @admin.register(Permission)
@@ -9,6 +9,4 @@ class PermissionAdmin(admin.ModelAdmin):
         return qs.select_related('content_type')
 
 # Register your models here.
-admin.site.register(Post)   #register our post model
-admin.site.register(Comment)
-admin.site.register(Category)
+admin.site.register(CV)
