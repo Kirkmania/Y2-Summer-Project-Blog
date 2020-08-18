@@ -33,13 +33,13 @@ class HomePageTest(TestCase):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'blog/post_list.html')
 
-    def test_can_save_a_POST_request(self):
-        login = self.client.login(username="admin", password="admin")
-        self.assertTrue(login)
+    # def test_can_save_a_POST_request(self):
+    #     login = self.client.login(username="admin", password="admin")
+    #     self.assertTrue(login)
 
-        response = self.client.post('/post/new/', {'title': "This is a test", 'text': "I hope this test works"})
+    #     response = self.client.post('/post/new/', {'title': "This is a test", 'text': "I hope this test works"})
 
-        self.assertEqual(Post.objects.count(), 1)
-        new_post = Post.objects.first()
-        self.assertEqual(new_post.text, 'I hope this test works')
+    #     self.assertEqual(Post.objects.count(), 1)
+    #     new_post = Post.objects.first()
+    #     self.assertEqual(new_post.text, 'I hope this test works')
 # Create your tests here.

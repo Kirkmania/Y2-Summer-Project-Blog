@@ -1,12 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, CV, Category    #import our post model we made
-from django.contrib.auth.models import Permission
-
-@admin.register(Permission)
-class PermissionAdmin(admin.ModelAdmin):
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.select_related('content_type')
+from .models import CV   #import our post model we made
 
 # Register your models here.
 admin.site.register(CV)

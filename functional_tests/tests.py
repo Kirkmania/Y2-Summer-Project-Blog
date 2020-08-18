@@ -49,9 +49,10 @@ class NewVisitorTest(StaticLiveServerTestCase):
             approved_comment=True)
 
         comment = Comment.objects.create(post=post,
-            author=self.user,
+            author="Kassandra",
             text="I've HAD it with those damn Kosmos Cultists!!",
-            created_date="0001-05-23 18:38")
+            created_date="0001-05-23 18:38",
+            approved_comment=False)
 
         post.save()
 
@@ -73,25 +74,23 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # pretends to check out a new blog
         self.browser.get(self.live_server_url)
 
-        # He notices the page title and header mentions a blog
+        # He notices the page title and navbar mentions a blog
         self.assertIn('Blog', self.browser.title)
-        header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('Blog', header_text)
+        navbar_text = self.browser.find_element_by_class_name('navbar-brand').text
+        self.assertIn('Blog', navbar_text)
 
         # He clicks on the sign-up button and is taken to a sign-up page
         signup_button = self.browser.find_element_by_id('signup_button')
         signup_button.click()
 
         # He enters his username and password, confirming his new account
-        signup_username = self.browser.find_element_by_id('id_username')
-        signup_password1 = self.browser.find_element_by_id('id_password1')
-        signup_password2 = self.browser.find_element_by_id('id_password2')
-        signup_submit_button = self.browser.find_element_by_id('signup_submit')
-
-        signup_username.send_keys('Jane_Doe')
-        signup_password1.send_keys('DjangoTest123')
-        signup_password2.send_keys('DjangoTest123')
-        signup_submit_button.click()
+        self.browser.find_element_by_id('id_username').send_keys('Jane_Doe')
+        self.browser.find_element_by_id('id_first_name').send_keys('Jane')
+        self.browser.find_element_by_id('id_last_name').send_keys('Doe')
+        self.browser.find_element_by_id('id_email').send_keys('jane@doe.com')
+        self.browser.find_element_by_id('id_password1').send_keys('DjangoTest123')
+        self.browser.find_element_by_id('id_password2').send_keys('DjangoTest123')
+        self.browser.find_element_by_id('signup_submit').click()
 
         # After signing up he is redirected to the homepage and sees the latest post
         post = self.browser.find_element_by_class_name('post')
@@ -141,7 +140,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
         # He wants to check his other drafts first before he publishes, so clicks back to homepage, then "drafts" button
         self.browser.find_element_by_link_text("George's Blog").click()
-        self.browser.find_element_by_id('post_drafts_button').click()
+        self.browser.find_element_by_id('view_drafts_button').click()
         self.browser.find_element_by_link_text('Lorem Ipsum').click()
 
         # He notices a missing line to add before publishing

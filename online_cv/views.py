@@ -6,4 +6,4 @@ from .models import CV
 
 def cv(request):
     form = CVForm()
-    return render(request, 'blog/cv.html', {'form': form})
+    return render(request, 'online_cv/cv.html', {'form': form})
