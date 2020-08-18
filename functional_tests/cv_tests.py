@@ -25,17 +25,17 @@ class NewCVTest(StaticLiveServerTestCase):
 
     def test_user_can_see_blog_posts_and_signup(self):
         self.browser.get(self.live_server_url)
-        
+
     # User is on the home page, clicks the CV builder link on the navbar
         self.browser.find_element_by_id("cv_builder").click()
     # User goes to CV builder, login is required so logs in
-        self.assertURLEqual(self.browser.current_url, "/accounts/login")
-        login_username = self.browser.find_element_by_id('login_username').sendkeys("Kassandra")
-        login_password = self.browser.find_element_by_id('login_password').sendkeys("malaka")
-        login_submit_button = self.browser.find_element_by_id('login_submit').click()
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/accounts/login/?next=/cv/")
+        self.browser.find_element_by_id('login_username').send_keys("Kassandra")
+        self.browser.find_element_by_id('login_password').send_keys("malaka")
+        self.browser.find_element_by_id('login_submit').click()
     # After login he is redirected to CV builder and finds two buttons - edit existing cv, make new cv
     # He clicks make new cv
-        self.assertURLEqual(self.browser.current_url, "/cv")
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/")
         self.fail("finish the test!")
     # He finds the personal details section and inputs his data and hits next
 
