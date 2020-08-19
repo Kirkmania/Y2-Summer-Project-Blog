@@ -36,8 +36,22 @@ class NewCVTest(StaticLiveServerTestCase):
     # After login he is redirected to CV builder and finds two buttons - edit existing cv, make new cv
     # He clicks make new cv
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/")
-        self.fail("finish the test!")
+        start_new_cv_button = self.browser.find_element_by_id('start_new_cv')
+        edit_existing_cv_button = self.browser.find_element_by_id('view_existing_cv')
+        start_new_cv_button.click()
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/personal_details")
+
     # He finds the personal details section and inputs his data and hits next
+        self.browser.find_element_by_id('id_first_name').send_keys("George")
+        self.browser.find_element_by_id('id_last_name').send_keys("Kirkman")
+        self.browser.find_element_by_id('id_profession').send_keys("Student")
+        self.browser.find_element_by_id('id_city').send_keys("Watford")
+        self.browser.find_element_by_id('id_postcode').send_keys("AB1 2CD")
+        self.browser.find_element_by_id('id_phone_number').send_keys("+447847133344")
+        self.browser.find_element_by_id('id_email').send_keys("george.kirkman27@gmail.com")
+        self.browser.find_element_by_id('personal_details_next').click()
+
+        self.fail("finish the test!")
 
     # Next is a short profile summary, some kind of char limit here
 

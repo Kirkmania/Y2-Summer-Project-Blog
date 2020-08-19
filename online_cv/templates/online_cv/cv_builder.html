@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+	<h1>CV Builder</h1>
+			<div class="btn-group btn-grou-lg" role="group" aria-label="Basic example">
+				<a class="btn btn-secondary" href="{% url 'cv_personal_details' %}" id="start_new_cv"><i class="fas fa-briefcase"></i> Start New CV</a>
+				<a class="btn btn-secondary" href="#" id="view_existing_cv"><i class="fas fa-file-alt"></i> View Existing CV</a>
+			</div>
+{% endblock %}
