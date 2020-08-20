@@ -3,7 +3,7 @@ from django.urls import resolve
 from django.http import HttpRequest
 from django.contrib.auth.models import Group, User
 from django.template.loader import render_to_string
-from .forms import cvPersonalDetailsForm
+from .forms import cvPersonalDetailsForm, cvProfileForm
 
 # Create your tests here.
 class CVUnitTests(TestCase):
@@ -38,12 +38,25 @@ class CVUnitTests(TestCase):
             "email": "george.kirkman27@gmail.com", })
 
         self.assertTrue(form.is_valid())
-        cvPersonalDetails = form.save(commit=False)
-        cvPersonalDetails.user = self.user
-        self.assertEqual(cvPersonalDetails.first_name, "George")
-        self.assertEqual(cvPersonalDetails.last_name, "Kirkman")
-        self.assertEqual(cvPersonalDetails.profession, "Student")
-        self.assertEqual(cvPersonalDetails.city, "Watford")
-        self.assertEqual(cvPersonalDetails.postcode, "AB1 2CD")
-        self.assertEqual(cvPersonalDetails.phone_number, "+447847133344")
-        self.assertEqual(cvPersonalDetails.email, "george.kirkman27@gmail.com")
+        cv_personal_details = form.save(commit=False)
+        cv_personal_details.user = self.user
+        cv_personal_details.save()
+        self.assertEqual(cv_personal_details.first_name, "George")
+        self.assertEqual(cv_personal_details.last_name, "Kirkman")
+        self.assertEqual(cv_personal_details.profession, "Student")
+        self.assertEqual(cv_personal_details.city, "Watford")
+        self.assertEqual(cv_personal_details.postcode, "AB1 2CD")
+        self.assertEqual(cv_personal_details.phone_number, "+447847133344")
+        self.assertEqual(cv_personal_details.email, "george.kirkman27@gmail.com")
+
+    def test_profile_is_saved(self):
+        c = self.client
+        login = c.login(username="username", password="password")
+        self.assertTrue(login)
+
+        form = cvProfileForm({"text": "<p>This is some example profile text.</p>",})
+
+        self.assertTrue(form.is_valid())
+        cv_profile = form.save(commit=False)
+        cv_profile.user = self.user
+        self.assertEqual(cv_profile.text, "<p>This is some example profile text.</p>")

@@ -23,4 +23,11 @@ class cvPersonalDetails(models.Model):
     email = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.first_name
+        return '%s %s' % (self.first_name, self.last_name)
+
+class cvProfile(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    text=RichTextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.user.get_full_name()

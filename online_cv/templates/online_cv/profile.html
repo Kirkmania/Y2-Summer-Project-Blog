@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+	<h1>CV Builder</h1>
+  <div class="form-group">
+    <form method="POST" class="post-form">{% csrf_token %}
+      {{ form.media }}
+      {{ form.as_p }}
+      <button id="profile_next" type="submit" class="btn btn-secondary">Next</button>
+    </form>
+    </div>
+{% endblock %}
