@@ -3,7 +3,8 @@ from django.urls import resolve
 from django.http import HttpRequest
 from django.contrib.auth.models import Group, User
 from django.template.loader import render_to_string
-from .forms import cvPersonalDetailsForm, cvProfileForm
+from .forms import cvPersonalDetailsForm, cvProfileForm, cvEducationForm
+import datetime
 
 # Create your tests here.
 class CVUnitTests(TestCase):
@@ -60,3 +61,28 @@ class CVUnitTests(TestCase):
         cv_profile = form.save(commit=False)
         cv_profile.user = self.user
         self.assertEqual(cv_profile.text, "<p>This is some example profile text.</p>")
+
+    def test_education_is_saved(self):
+        c = self.client
+        login = c.login(username="username", password="password")
+        self.assertTrue(login)
+
+        form = cvEducationForm({
+            "school": "Schoolname", 
+            "location": "Schoolplace", 
+            "subject": "Computer Science", 
+            "grade": "First", 
+            "start_date": "23/09/2018", 
+            "end_date": "15/04/2021",
+            })
+
+        self.assertTrue(form.is_valid())
+        cv_education = form.save(commit=False)
+        cv_education.user = self.user
+        cv_education.save()
+        self.assertEqual(cv_education.school, "Schoolname")
+        self.assertEqual(cv_education.location, "Schoolplace")
+        self.assertEqual(cv_education.subject, "Computer Science")
+        self.assertEqual(cv_education.grade, "First")
+        self.assertEqual(cv_education.start_date, datetime.date(2018, 9, 23))
+        self.assertEqual(cv_education.end_date, datetime.date(2021, 4, 15))

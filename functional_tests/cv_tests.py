@@ -64,43 +64,43 @@ class NewCVTest(StaticLiveServerTestCase):
     # Next is the education section, where he enters his uni details and then clicks "save and add another"
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
         self.browser.find_element_by_id('id_school').send_keys("University of Birmingham")
-        self.browser.find_element_by_id('id_school_location').send_keys("Birmingham")
+        self.browser.find_element_by_id('id_location').send_keys("Birmingham")
         self.browser.find_element_by_id('id_subject').send_keys("BSc Computer Science")
         self.browser.find_element_by_id('id_grade').send_keys("First")
-        self.browser.find_element_by_id('id_start_date').send_keys("23092018")
-        self.browser.find_element_by_id('id_end_date').send_keys("15042021")
-        self.browser.find_element_by_id('education_save_and_add')
+        self.browser.find_element_by_id('id_start_date').send_keys("23/09/2018")
+        self.browser.find_element_by_id('id_end_date').send_keys("15/04/2021")
+        self.browser.find_element_by_id('education_save_and_add').click()
     
     # He also enters his A Levels
         # Chemistry 
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
         self.browser.find_element_by_id('id_school').send_keys("Rickmansworth 6th Form")
-        self.browser.find_element_by_id('id_school_location').send_keys("Watford")
+        self.browser.find_element_by_id('id_location').send_keys("Watford")
         self.browser.find_element_by_id('id_subject').send_keys("Chemistry")
         self.browser.find_element_by_id('id_grade').send_keys("B")
-        self.browser.find_element_by_id('id_start_date').send_keys("23092015")
-        self.browser.find_element_by_id('id_end_date').send_keys("15042016")
-        self.browser.find_element_by_id('education_save_and_add')
+        self.browser.find_element_by_id('id_start_date').send_keys("23/09/2015")
+        self.browser.find_element_by_id('id_end_date').send_keys("15/04/2016")
+        self.browser.find_element_by_id('education_save_and_add').click()
 
         # Physics 
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
         self.browser.find_element_by_id('id_school').send_keys("Rickmansworth 6th Form")
-        self.browser.find_element_by_id('id_school_location').send_keys("Watford")
+        self.browser.find_element_by_id('id_location').send_keys("Watford")
         self.browser.find_element_by_id('id_subject').send_keys("Physics")
         self.browser.find_element_by_id('id_grade').send_keys("A")
-        self.browser.find_element_by_id('id_start_date').send_keys("23092015")
-        self.browser.find_element_by_id('id_end_date').send_keys("15042016")
-        self.browser.find_element_by_id('education_save_and_add')
+        self.browser.find_element_by_id('id_start_date').send_keys("23/09/2015")
+        self.browser.find_element_by_id('id_end_date').send_keys("15/04/2016")
+        self.browser.find_element_by_id('education_save_and_add').click()
 
         # Maths 
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
         self.browser.find_element_by_id('id_school').send_keys("Rickmansworth 6th Form")
-        self.browser.find_element_by_id('id_school_location').send_keys("Watford")
+        self.browser.find_element_by_id('id_location').send_keys("Watford")
         self.browser.find_element_by_id('id_subject').send_keys("Mathematics")
         self.browser.find_element_by_id('id_grade').send_keys("A")
-        self.browser.find_element_by_id('id_start_date').send_keys("23092015")
-        self.browser.find_element_by_id('id_end_date').send_keys("15042016")
-        self.browser.find_element_by_id('education_save_and_add')
+        self.browser.find_element_by_id('id_start_date').send_keys("23/09/2015")
+        self.browser.find_element_by_id('id_end_date').send_keys("15/04/2016")
+        self.browser.find_element_by_id('education_save_and_add').click()
 
     # Next is work history, he enters the most recent employer details
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/work_history")
@@ -111,8 +111,8 @@ class NewCVTest(StaticLiveServerTestCase):
             • Recounting the history of video-gaming to any interested visitors and discussing any areas of the history of the games and esports industry.\
             • Helping parents and their children to connect by translating the child's passion and gaming experience into more understandable terms for the parents.\
             • Introducing visitors to consoles or games they have never seen before and teaching their significance in the development of the industry.")
-        self.browser.find_element_by_id('id_start_date').send_keys("23042016")
-        self.browser.find_element_by_id('id_end_date').send_keys("23052016")
+        self.browser.find_element_by_id('id_start_date').send_keys("23/04/2016")
+        self.browser.find_element_by_id('id_end_date').send_keys("23/05/2016")
         self.browser.find_element_by_id('job_save_and_add')
 
     # He has to enter some details/description of the job on the next page (richtext editor) TODO: currently on previous page, does it need separation?

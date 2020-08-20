@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import CVForm, cvPersonalDetailsForm, cvProfileForm
-from .models import CV, cvPersonalDetails, cvProfile
+from .forms import CVForm, cvPersonalDetailsForm, cvProfileForm, cvEducationForm
+from .models import CV, cvPersonalDetails, cvProfile, cvEducation
 
 # Create your views here.
 @login_required
@@ -30,7 +30,22 @@ def profile(request):
             cv_profile = form.save(commit=False)
             cv_profile.user = request.user
             cv_profile.save()
-            return redirect('cv_profile')
+            return redirect('cv_education')
     else:
         form = cvProfileForm()
     return render(request, 'online_cv/profile.html', {'form': form})
+
+def education(request):
+    form = cvEducationForm()
+    if request.method == "POST":
+        form = cvEducationForm(request.POST)
+        if form.is_valid():
+            cv_education = form.save(commit=False)
+            cv_education.user = request.user
+            cv_education.save()
+            if 'add_another' in request.POST:
+                return redirect('cv_education')
+            return redirect('cv_builder')
+    else:
+        form = cvEducationForm()
+    return render(request, 'online_cv/education.html', {'form': form})

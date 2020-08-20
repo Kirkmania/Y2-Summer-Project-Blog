@@ -31,3 +31,15 @@ class cvProfile(models.Model):
 
     def __str__(self):
         return self.user.get_full_name()
+
+class cvEducation(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    school = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    subject = models.CharField(max_length=100)
+    grade = models.CharField(max_length=100)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return '%s %s' % (self.user.get_full_name(), self.subject)
