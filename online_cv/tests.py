@@ -3,7 +3,7 @@ from django.urls import resolve
 from django.http import HttpRequest
 from django.contrib.auth.models import Group, User
 from django.template.loader import render_to_string
-from .forms import cvPersonalDetailsForm, cvProfileForm, cvEducationForm
+from .forms import cvPersonalDetailsForm, cvProfileForm, cvEducationForm, cvWorkHistoryForm
 import datetime
 
 # Create your tests here.
@@ -86,3 +86,28 @@ class CVUnitTests(TestCase):
         self.assertEqual(cv_education.grade, "First")
         self.assertEqual(cv_education.start_date, datetime.date(2018, 9, 23))
         self.assertEqual(cv_education.end_date, datetime.date(2021, 4, 15))
+
+    def test_work_history_is_saved(self):
+        c = self.client
+        login = c.login(username="username", password="password")
+        self.assertTrue(login)
+
+        form = cvWorkHistoryForm({
+            "job_title": "Jobname", 
+            "employer": "Employername", 
+            "city": "London", 
+            "description": "<p>This is some example job text.</p>", 
+            "start_date": "23/09/2018", 
+            "end_date": "15/04/2019",
+            })
+
+        self.assertTrue(form.is_valid())
+        cv_education = form.save(commit=False)
+        cv_education.user = self.user
+        cv_education.save()
+        self.assertEqual(cv_education.job_title, "Jobname")
+        self.assertEqual(cv_education.employer, "Employername")
+        self.assertEqual(cv_education.city, "London")
+        self.assertEqual(cv_education.description, "<p>This is some example job text.</p>")
+        self.assertEqual(cv_education.start_date, datetime.date(2018, 9, 23))
+        self.assertEqual(cv_education.end_date, datetime.date(2019, 4, 15))

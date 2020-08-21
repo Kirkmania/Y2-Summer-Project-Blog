@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import CVForm, cvPersonalDetailsForm, cvProfileForm, cvEducationForm
-from .models import CV, cvPersonalDetails, cvProfile, cvEducation
+from .forms import CVForm, cvPersonalDetailsForm, cvProfileForm, cvEducationForm, cvWorkHistoryForm
+from .models import CV, cvPersonalDetails, cvProfile, cvEducation, cvWorkHistory
 
 # Create your views here.
 @login_required
@@ -45,7 +45,22 @@ def education(request):
             cv_education.save()
             if 'education_save_and_add' in request.POST:
                 return redirect('cv_education')
-            return redirect('cv_builder')
+            return redirect('cv_work_history')
     else:
         form = cvEducationForm()
     return render(request, 'online_cv/education.html', {'form': form})
+
+def work_history(request):
+    form = cvWorkHistoryForm()
+    if request.method == "POST":
+        form = cvWorkHistoryForm(request.POST)
+        if form.is_valid():
+            cv_work_history = form.save(commit=False)
+            cv_work_history.user = request.user
+            cv_work_history.save()
+            if 'work_history_save_and_add' in request.POST:
+                return redirect('cv_work_history')
+            return redirect('cv_builder')
+    else:
+        form = cvWorkHistoryForm()
+    return render(request, 'online_cv/work_history.html', {'form': form})

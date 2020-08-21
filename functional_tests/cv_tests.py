@@ -70,7 +70,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_start_date').send_keys("23/09/2018")
         self.browser.find_element_by_id('id_end_date').send_keys("15/04/2021")
         self.browser.find_element_by_id('submit-id-education_save_and_add').click()
-        time.sleep(4)
+        
     # He also enters his A Levels
         # Chemistry 
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
@@ -107,13 +107,15 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_job_title').send_keys("Visitor Experience Helper")
         self.browser.find_element_by_id('id_employer').send_keys("The Science Museum")
         self.browser.find_element_by_id('id_city').send_keys("London")
-        self.browser.find_element_by_id('id_description').send_keys("I worked as a volunteer in the “Visitor Experience” team for the Science Museum’s Power Up exhibition.\
+        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
+        self.browser.find_element_by_class_name('cke_editable').send_keys("I worked as a volunteer in the “Visitor Experience” team for the Science Museum’s Power Up exhibition.\
             • Recounting the history of video-gaming to any interested visitors and discussing any areas of the history of the games and esports industry.\
             • Helping parents and their children to connect by translating the child's passion and gaming experience into more understandable terms for the parents.\
             • Introducing visitors to consoles or games they have never seen before and teaching their significance in the development of the industry.")
+        self.browser.switch_to_default_content()
         self.browser.find_element_by_id('id_start_date').send_keys("23/04/2016")
         self.browser.find_element_by_id('id_end_date').send_keys("23/05/2016")
-        self.browser.find_element_by_id('job_save_and_add')
+        self.browser.find_element_by_id('submit-id-work_history_save_and_add')
 
     # He has to enter some details/description of the job on the next page (richtext editor) TODO: currently on previous page, does it need separation?
 
@@ -121,14 +123,16 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_job_title').send_keys("Sales Representative")
         self.browser.find_element_by_id('id_employer').send_keys("Three")
         self.browser.find_element_by_id('id_city').send_keys("Watford")
-        self.browser.find_element_by_id('id_description').send_keys("I worked as a part of the sales team in the Three mobile carrier shop in the high street's shopping centre.\
+        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
+        self.browser.find_element_by_class_name('cke_editable').send_keys("I worked as a part of the sales team in the Three mobile carrier shop in the high street's shopping centre.\
             • Curabitur eleifend arcu quis neque vehicula dapibus.\
             • Duis hendrerit lectus ut eleifend tincidunt.\
             • Maecenas et massa congue, pharetra nibh vitae, ultricies augue.\
             • Integer sit amet est id lectus ornare vestibulum eget ac ipsum.")
+        self.browser.switch_to_default_content()
         self.browser.find_element_by_id('id_start_date').send_keys("19072017")
         self.browser.find_element_by_id('id_end_date').send_keys("15092017")
-        self.browser.find_element_by_id('job_save_and_next')
+        self.browser.find_element_by_id('submit-id-work_history_next')
 
     # Next page offers optional additions, user chooses to add skills
         self.fail("finish the test!")

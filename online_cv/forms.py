@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 from bootstrap_datepicker_plus import DatePickerInput
-from .models import CV, cvPersonalDetails, cvProfile, cvEducation
+from .models import CV, cvPersonalDetails, cvProfile, cvEducation, cvWorkHistory
 
 class CVForm(forms.ModelForm):
 
@@ -47,7 +47,7 @@ class cvProfileForm(forms.ModelForm):
         fields = ('text',)
         widgets = {'text': forms.Textarea(attrs={'class': 'form-control'})}
     
-    
+
 class cvEducationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -66,14 +66,47 @@ class cvEducationForm(forms.ModelForm):
                 Column('end_date', css_class='form-group col-md-2 mb-0'),
                 css_class='form-row'
             ),
-            Submit('education_save_and_add', 'Save and add'),
-            Submit('education_next', 'Next'),
+            Submit('education_save_and_add', 'Save and add', css_class='btn btn-secondary'),
+            Submit('education_next', 'Next', css_class='btn btn-secondary'),
             
         )
 
     class Meta:
         model = cvEducation
         fields = ('school', 'location', 'subject', 'grade', 'start_date', 'end_date',)
+        widgets = {
+            'start_date': DatePickerInput(options={"format": "DD/MM/YYYY"}),
+            'end_date': DatePickerInput(options={"format": "DD/MM/YYYY"})
+            }
+
+class cvWorkHistoryForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('job_title', css_class='form-group col-md-6 mb-0'),
+                Column('employer', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('city', css_class='form-group col-md-4 mb-0'),
+                Column('start_date', css_class='form-group col-md-2 mb-0'),
+                Column('end_date', css_class='form-group col-md-2 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('description', css_class='form-group col-md-2 mb-0'),
+            ),
+            Submit('work_history_save_and_add', 'Save and add', css_class='btn btn-secondary'),
+            Submit('work_history_next', 'Next', css_class='btn btn-secondary'),
+            
+        )
+
+    class Meta:
+        model = cvWorkHistory
+        fields = ('job_title', 'employer', 'city', 'description', 'start_date', 'end_date',)
         widgets = {
             'start_date': DatePickerInput(options={"format": "DD/MM/YYYY"}),
             'end_date': DatePickerInput(options={"format": "DD/MM/YYYY"})
