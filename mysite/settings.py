@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'online_cv',
     'ckeditor',
     'crispy_forms',
-    'bootstrap_datepicker_plus'
+    'bootstrap_datepicker_plus',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +134,49 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Configuration for crispy-forms app
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+        ],
+        'height': 170,
+    },
+
+    'blog': {
+        'skin': 'moono-lisa',
+        'toolbar_Custom': [
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+                '/',
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Blockquote', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',]},
+            {'name': 'insert',
+             'items': ['Image', 'Table', 'HorizontalRule', '-', 'Source', 'Preview']},
+
+        ],
+        'toolbar': 'Custom',
+         'height': '250',
+         'width': '1000',
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
+            'uploadimage',
+            # extra plugins
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            # 'devtools',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath'
+        ]),
+    }
+}

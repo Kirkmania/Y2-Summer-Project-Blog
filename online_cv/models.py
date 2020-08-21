@@ -27,7 +27,7 @@ class cvPersonalDetails(models.Model):
 
 class cvProfile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text=RichTextField(blank=True, null=True)
+    text=RichTextField()
 
     def __str__(self):
         return self.user.get_full_name()
@@ -39,7 +39,7 @@ class cvEducation(models.Model):
     subject = models.CharField(max_length=100)
     grade = models.CharField(max_length=100)
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return '%s %s' % (self.user.get_full_name(), self.subject)
@@ -51,7 +51,7 @@ class cvWorkHistory(models.Model):
     city = models.CharField(max_length=100)
     description = RichTextField(blank=True, null=True)
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return '%s %s' % (self.user.get_full_name(), self.job_title)
