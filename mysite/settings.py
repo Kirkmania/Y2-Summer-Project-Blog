@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'accounts',
     'online_cv',
     'ckeditor',
+    'crispy_forms',
+    'bootstrap_datepicker_plus'
 ]
 
 MIDDLEWARE = [
@@ -129,3 +131,6 @@ LOGIN_REDIRECT_URL = '/'
 
 # Redirect successful logOUT to top-level index
 LOGOUT_REDIRECT_URL = '/'
+
+# Configuration for crispy-forms app
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

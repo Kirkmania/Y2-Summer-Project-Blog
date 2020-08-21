@@ -51,7 +51,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_postcode').send_keys("AB1 2CD")
         self.browser.find_element_by_id('id_phone_number').send_keys("+447847133344")
         self.browser.find_element_by_id('id_email').send_keys("george.kirkman27@gmail.com")
-        self.browser.find_element_by_id('personal_details_next').click()
+        self.browser.find_element_by_id('submit-id-personal_details_next').click()
 
     # Next is a short profile summary, some kind of char limit here
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/profile")
@@ -69,8 +69,8 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_grade').send_keys("First")
         self.browser.find_element_by_id('id_start_date').send_keys("23/09/2018")
         self.browser.find_element_by_id('id_end_date').send_keys("15/04/2021")
-        self.browser.find_element_by_id('education_save_and_add').click()
-    
+        self.browser.find_element_by_id('submit-id-education_save_and_add').click()
+        time.sleep(4)
     # He also enters his A Levels
         # Chemistry 
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
@@ -80,7 +80,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_grade').send_keys("B")
         self.browser.find_element_by_id('id_start_date').send_keys("23/09/2015")
         self.browser.find_element_by_id('id_end_date').send_keys("15/04/2016")
-        self.browser.find_element_by_id('education_save_and_add').click()
+        self.browser.find_element_by_id('submit-id-education_save_and_add').click()
 
         # Physics 
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
@@ -90,7 +90,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_grade').send_keys("A")
         self.browser.find_element_by_id('id_start_date').send_keys("23/09/2015")
         self.browser.find_element_by_id('id_end_date').send_keys("15/04/2016")
-        self.browser.find_element_by_id('education_save_and_add').click()
+        self.browser.find_element_by_id('submit-id-education_save_and_add').click()
 
         # Maths 
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
@@ -100,7 +100,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_grade').send_keys("A")
         self.browser.find_element_by_id('id_start_date').send_keys("23/09/2015")
         self.browser.find_element_by_id('id_end_date').send_keys("15/04/2016")
-        self.browser.find_element_by_id('education_save_and_add').click()
+        self.browser.find_element_by_id('submit-id-education_next').click()
 
     # Next is work history, he enters the most recent employer details
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/work_history")

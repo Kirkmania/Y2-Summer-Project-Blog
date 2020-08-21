@@ -43,7 +43,7 @@ def education(request):
             cv_education = form.save(commit=False)
             cv_education.user = request.user
             cv_education.save()
-            if 'add_another' in request.POST:
+            if 'education_save_and_add' in request.POST:
                 return redirect('cv_education')
             return redirect('cv_builder')
     else:

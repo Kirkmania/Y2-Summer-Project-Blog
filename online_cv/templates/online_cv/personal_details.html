@@ -1,12 +1,10 @@
 {% extends 'blog/base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
+</div></div>
 	<h1>CV Builder</h1>
-  <div class="form-group">
-    <form method="POST" class="post-form">{% csrf_token %}
       {{ form.media }}
-      {{ form.as_p }}
-      <button id="personal_details_next" type="submit" class="btn btn-secondary">Next</button>
-    </form>
-    </div>
+      {% crispy form %}
 {% endblock %}
