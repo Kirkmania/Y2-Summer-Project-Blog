@@ -2,12 +2,12 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 # Create your models here.
 class CV(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text=RichTextField(blank=True, null=True)
+    text = CKEditor5Field('text', config_name='default', blank=True)
     
     def __str__(self):
         return self.text
@@ -27,7 +27,7 @@ class cvPersonalDetails(models.Model):
 
 class cvProfile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text=RichTextField()
+    text = CKEditor5Field('Personal Statement', config_name='default', blank=True)
 
     def __str__(self):
         return self.user.get_full_name()
@@ -49,7 +49,7 @@ class cvWorkHistory(models.Model):
     job_title = models.CharField(max_length=100)
     employer = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
-    description = RichTextField(blank=True, null=True)
+    description = CKEditor5Field('Description', config_name='default', blank=True)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
 

@@ -2,14 +2,14 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 # Create your models here.
 
 # NOTE: My first django model! Pog!
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    text = RichTextField(config_name='blog')
+    text = CKEditor5Field('Text', config_name='extends', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     category = models.CharField(max_length=255, default='uncategorised')

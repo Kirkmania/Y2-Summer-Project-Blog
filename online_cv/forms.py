@@ -45,7 +45,6 @@ class cvProfileForm(forms.ModelForm):
     class Meta:
         model = cvProfile
         fields = ('text',)
-        widgets = {'text': forms.Textarea(attrs={'class': 'form-control'})}
     
 
 class cvEducationForm(forms.ModelForm):
@@ -68,7 +67,6 @@ class cvEducationForm(forms.ModelForm):
             ),
             Submit('education_save_and_add', 'Save and add', css_class='btn btn-secondary'),
             Submit('education_next', 'Next', css_class='btn btn-secondary'),
-            
         )
 
     class Meta:
@@ -97,7 +95,7 @@ class cvWorkHistoryForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('description', css_class='form-group col-md-2 mb-0'),
+                Column('description', css_class='form-group col-md-8 mb-0'),
             ),
             Submit('work_history_save_and_add', 'Save and add', css_class='btn btn-secondary'),
             Submit('work_history_next', 'Next', css_class='btn btn-secondary'),
