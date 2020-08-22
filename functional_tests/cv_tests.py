@@ -55,10 +55,8 @@ class NewCVTest(StaticLiveServerTestCase):
 
     # Next is a short profile summary, some kind of char limit here
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/profile")
-        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
-        self.browser.find_element_by_class_name("cke_editable").send_keys("This is my profile bio lorem ipsum cheeki breeki iv\
+        self.browser.find_element_by_class_name("ck-content").send_keys("This is my profile bio lorem ipsum cheeki breeki iv\
  damke pogchampion my duderino. That's my secret, captain, I'm always angry. How much wood could a woodchuck chuck if a woodchuck could chuck wood?")
-        self.browser.switch_to_default_content()
         self.browser.find_element_by_id('profile_next').click()
 
     # Next is the education section, where he enters his uni details and then clicks "save and add another"
@@ -67,8 +65,14 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_location').send_keys("Birmingham")
         self.browser.find_element_by_id('id_subject').send_keys("BSc Computer Science")
         self.browser.find_element_by_id('id_grade').send_keys("First")
-        self.browser.find_element_by_id('id_start_date').send_keys("23/09/2018")
-        self.browser.find_element_by_id('id_end_date').send_keys("15/04/2021")
+        start_date = self.browser.find_element_by_id('id_start_date')
+        end_date = self.browser.find_element_by_id('id_end_date')
+        for x in range(10):
+            start_date.send_keys(Keys.BACKSPACE)
+        start_date.send_keys("23/09/2018")
+        for x in range(10):
+            end_date.send_keys(Keys.BACKSPACE)
+        end_date.send_keys("15/04/2021")
         self.browser.find_element_by_id('submit-id-education_save_and_add').click()
         
     # He also enters his A Levels
@@ -78,8 +82,14 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_location').send_keys("Watford")
         self.browser.find_element_by_id('id_subject').send_keys("Chemistry")
         self.browser.find_element_by_id('id_grade').send_keys("B")
-        self.browser.find_element_by_id('id_start_date').send_keys("23/09/2015")
-        self.browser.find_element_by_id('id_end_date').send_keys("15/04/2016")
+        start_date = self.browser.find_element_by_id('id_start_date')
+        end_date = self.browser.find_element_by_id('id_end_date')
+        for x in range(10):
+            start_date.send_keys(Keys.BACKSPACE)
+        start_date.send_keys("23/09/2015")
+        for x in range(10):
+            end_date.send_keys(Keys.BACKSPACE)
+        end_date.send_keys("15/04/2016")
         self.browser.find_element_by_id('submit-id-education_save_and_add').click()
 
         # Physics 
@@ -88,8 +98,14 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_location').send_keys("Watford")
         self.browser.find_element_by_id('id_subject').send_keys("Physics")
         self.browser.find_element_by_id('id_grade').send_keys("A")
-        self.browser.find_element_by_id('id_start_date').send_keys("23/09/2015")
-        self.browser.find_element_by_id('id_end_date').send_keys("15/04/2016")
+        start_date = self.browser.find_element_by_id('id_start_date')
+        end_date = self.browser.find_element_by_id('id_end_date')
+        for x in range(10):
+            start_date.send_keys(Keys.BACKSPACE)
+        start_date.send_keys("23/09/2015")
+        for x in range(10):
+            end_date.send_keys(Keys.BACKSPACE)
+        end_date.send_keys("15/04/2016")
         self.browser.find_element_by_id('submit-id-education_save_and_add').click()
 
         # Maths 
@@ -98,8 +114,14 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_location').send_keys("Watford")
         self.browser.find_element_by_id('id_subject').send_keys("Mathematics")
         self.browser.find_element_by_id('id_grade').send_keys("A")
-        self.browser.find_element_by_id('id_start_date').send_keys("23/09/2015")
-        self.browser.find_element_by_id('id_end_date').send_keys("15/04/2016")
+        start_date = self.browser.find_element_by_id('id_start_date')
+        end_date = self.browser.find_element_by_id('id_end_date')
+        for x in range(10):
+            start_date.send_keys(Keys.BACKSPACE)
+        start_date.send_keys("23/09/2015")
+        for x in range(10):
+            end_date.send_keys(Keys.BACKSPACE)
+        end_date.send_keys("15/04/2016")
         self.browser.find_element_by_id('submit-id-education_next').click()
 
     # Next is work history, he enters the most recent employer details
@@ -107,15 +129,19 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_job_title').send_keys("Visitor Experience Helper")
         self.browser.find_element_by_id('id_employer').send_keys("The Science Museum")
         self.browser.find_element_by_id('id_city').send_keys("London")
-        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
-        self.browser.find_element_by_class_name('cke_editable').send_keys("I worked as a volunteer in the “Visitor Experience” team for the Science Museum’s Power Up exhibition.\
-            • Recounting the history of video-gaming to any interested visitors and discussing any areas of the history of the games and esports industry.\
-            • Helping parents and their children to connect by translating the child's passion and gaming experience into more understandable terms for the parents.\
-            • Introducing visitors to consoles or games they have never seen before and teaching their significance in the development of the industry.")
-        self.browser.switch_to_default_content()
-        self.browser.find_element_by_id('id_start_date').send_keys("23/04/2016")
-        self.browser.find_element_by_id('id_end_date').send_keys("23/05/2016")
-        self.browser.find_element_by_id('submit-id-work_history_save_and_add')
+        self.browser.find_element_by_class_name('ck-content').send_keys("I worked as a volunteer in the “Visitor Experience” team for the Science Museum’s Power Up exhibition."
+            + Keys.ENTER + "1. Recounting the history of video-gaming to any interested visitors and discussing any areas of the history of the games and esports industry."
+            + Keys.ENTER + "2. Helping parents and their children to connect by translating the child's passion and gaming experience into more understandable terms for the parents."
+            + Keys.ENTER + "3. Introducing visitors to consoles or games they have never seen before and teaching their significance in the development of the industry.")
+        start_date = self.browser.find_element_by_id('id_start_date')
+        end_date = self.browser.find_element_by_id('id_end_date')
+        for x in range(10):
+            start_date.send_keys(Keys.BACKSPACE)
+        start_date.send_keys("23/04/2016")
+        for x in range(10):
+            end_date.send_keys(Keys.BACKSPACE)
+        end_date.send_keys("23/04/2016")
+        self.browser.find_element_by_id('submit-id-work_history_save_and_add').click()
 
     # He has to enter some details/description of the job on the next page (richtext editor) TODO: currently on previous page, does it need separation?
 
@@ -123,16 +149,20 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_job_title').send_keys("Sales Representative")
         self.browser.find_element_by_id('id_employer').send_keys("Three")
         self.browser.find_element_by_id('id_city').send_keys("Watford")
-        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
-        self.browser.find_element_by_class_name('cke_editable').send_keys("I worked as a part of the sales team in the Three mobile carrier shop in the high street's shopping centre.\
-            • Curabitur eleifend arcu quis neque vehicula dapibus.\
-            • Duis hendrerit lectus ut eleifend tincidunt.\
-            • Maecenas et massa congue, pharetra nibh vitae, ultricies augue.\
-            • Integer sit amet est id lectus ornare vestibulum eget ac ipsum.")
-        self.browser.switch_to_default_content()
-        self.browser.find_element_by_id('id_start_date').send_keys("19072017")
-        self.browser.find_element_by_id('id_end_date').send_keys("15092017")
-        self.browser.find_element_by_id('submit-id-work_history_next')
+        self.browser.find_element_by_class_name('ck-content').send_keys("I worked as a part of the sales team in the Three mobile carrier shop in the high street's shopping centre." 
+            + Keys.ENTER + "1. Curabitur eleifend arcu quis neque vehicula dapibus."
+            + Keys.ENTER + "2. Duis hendrerit lectus ut eleifend tincidunt."
+            + Keys.ENTER + "3. Maecenas et massa congue, pharetra nibh vitae, ultricies augue."
+            + Keys.ENTER + "4. Integer sit amet est id lectus ornare vestibulum eget ac ipsum.")
+        start_date = self.browser.find_element_by_id('id_start_date')
+        end_date = self.browser.find_element_by_id('id_end_date')
+        for x in range(10):
+            start_date.send_keys(Keys.BACKSPACE)
+        start_date.send_keys("19/07/2017")
+        for x in range(10):
+            end_date.send_keys(Keys.BACKSPACE)
+        end_date.send_keys("15/09/2017")
+        self.browser.find_element_by_id('submit-id-work_history_next').click()
 
     # Next page offers optional additions, user chooses to add skills
         self.fail("finish the test!")
