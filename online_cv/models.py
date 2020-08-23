@@ -81,3 +81,13 @@ class cvInterest(models.Model):
 
     def __str__(self):
         return self.user.get_full_name()
+
+#language
+
+class cvCertification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
+    certification = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.user.get_full_name()

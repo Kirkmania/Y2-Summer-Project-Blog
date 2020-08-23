@@ -1,6 +1,6 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column
+from crispy_forms.layout import Layout, Submit, Row, Column, ButtonHolder, Div
 from bootstrap_datepicker_plus import DatePickerInput
 from .models import *
 
@@ -144,3 +144,27 @@ class cvInterestForm(forms.ModelForm):
     class Meta:
         model = cvInterest
         fields = ('interest', 'description',)
+
+class cvCertificationForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('date', css_class='form-group col-md-2 mb-0'),
+                Column('certification', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+            Div(css_class='form-group col-md-5 mb-0'),
+            ButtonHolder(
+            Submit('certification_add_another', 'Save and add', css_class='btn btn-secondary offset-4'),
+            Submit('certification_next', 'Next', css_class='btn btn-secondary'),
+            )
+        )
+
+
+    class Meta:
+        model = cvCertification
+        fields = ('date', 'certification',)
+        widgets = {'date': DatePickerInput(options={"format": "DD/MM/YYYY"})}

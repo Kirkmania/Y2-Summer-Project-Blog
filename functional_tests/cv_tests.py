@@ -200,6 +200,7 @@ class NewCVTest(StaticLiveServerTestCase):
         for x in range(10):
             date.send_keys(Keys.BACKSPACE)
         date.send_keys("19/07/2017")
+        self.browser.find_element_by_xpath("//body").click() # NOTE: NOT NECESSARY AS I MOVED SUBMIT BUTTON, BUT THIS IS HOW TO CLICK "OFF" THE ELEMENT so it's not in the way
         self.browser.find_element_by_id('submit-id-certification_add_another').click()
 
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/certifications")

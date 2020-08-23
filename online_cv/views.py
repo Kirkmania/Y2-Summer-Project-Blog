@@ -123,3 +123,18 @@ def interests(request):
     else:
         form = cvInterestForm()
     return render(request, 'online_cv/interests.html', {'form': form,})
+
+# languages
+
+def certifications(request):
+    if request.method == "POST":
+        form = cvCertificationForm(request.POST)
+        if form.is_valid():
+            cv_certification = form.save(commit=False)
+            cv_certification.user = request.user
+            cv_certification.save()
+            if 'certification_add_another' in request.POST:
+                return redirect('cv_certifications')
+    else:
+        form = cvCertificationForm()
+    return render(request, 'online_cv/certifications.html', {'form': form,})
