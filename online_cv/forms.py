@@ -5,13 +5,11 @@ from bootstrap_datepicker_plus import DatePickerInput
 from .models import *
 
 class CVForm(forms.ModelForm):
-
     class Meta:
         model = CV
         fields = ('text',)
 
 class cvPersonalDetailsForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -41,14 +39,12 @@ class cvPersonalDetailsForm(forms.ModelForm):
 
 
 class cvProfileForm(forms.ModelForm):
-
     class Meta:
         model = cvProfile
         fields = ('text',)
     
 
 class cvEducationForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -78,7 +74,6 @@ class cvEducationForm(forms.ModelForm):
             }
 
 class cvWorkHistoryForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -99,7 +94,6 @@ class cvWorkHistoryForm(forms.ModelForm):
             ),
             Submit('work_history_save_and_add', 'Save and add', css_class='btn btn-secondary'),
             Submit('work_history_next', 'Next', css_class='btn btn-secondary'),
-            
         )
 
     class Meta:
@@ -111,23 +105,21 @@ class cvWorkHistoryForm(forms.ModelForm):
             }
 
 class cvExtrasForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('extras_next', 'Next'))
+        self.helper.add_input(Submit('extras_next', 'Next', css_class='btn btn-secondary'))
 
     class Meta:
         model = cvExtras
         fields = ('skills', 'interests', 'languages', 'certifications',)
 
 class cvSkillForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('skill_add_another', 'Save and add another'))
-        self.helper.add_input(Submit('skill_next', 'Next'))
+        self.helper.add_input(Submit('skill_add_another', 'Save and add another', css_class='btn btn-secondary'))
+        self.helper.add_input(Submit('skill_next', 'Next', css_class='btn btn-secondary'))
 
     class Meta:
         model = cvSkill
@@ -138,8 +130,8 @@ class cvInterestForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('interest_add_another', 'Save and add another'))
-        self.helper.add_input(Submit('interest_next', 'Next'))
+        self.helper.add_input(Submit('interest_add_another', 'Save and add another', css_class='btn btn-secondary'))
+        self.helper.add_input(Submit('interest_next', 'Next', css_class='btn btn-secondary'))
 
     class Meta:
         model = cvInterest
@@ -156,7 +148,6 @@ class cvCertificationForm(forms.ModelForm):
                 Column('certification', css_class='form-group col-md-4 mb-0'),
                 css_class='form-row'
             ),
-            Div(css_class='form-group col-md-5 mb-0'),
             ButtonHolder(
             Submit('certification_add_another', 'Save and add', css_class='btn btn-secondary offset-4'),
             Submit('certification_next', 'Next', css_class='btn btn-secondary'),
@@ -168,3 +159,25 @@ class cvCertificationForm(forms.ModelForm):
         model = cvCertification
         fields = ('date', 'certification',)
         widgets = {'date': DatePickerInput(options={"format": "DD/MM/YYYY"})}
+
+class cvLanguageForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('language', css_class='form-group col-md-4 mb-0'),
+                Column('proficiency', css_class='form-group col-md-3.5 mb-0'),
+                css_class='form-row'
+            ),
+            ButtonHolder(
+            Submit('language_add_another', 'Save and add', css_class='btn btn-secondary offset-4'),
+            Submit('language_next', 'Next', css_class='btn btn-secondary'),
+            )
+        )
+
+
+    class Meta:
+        model = cvLanguage
+        fields = ('language', 'proficiency',)

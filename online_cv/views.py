@@ -78,9 +78,9 @@ def extras(request):
             elif extras.interests == True:
                 return redirect('cv_interests')               
             elif extras.languages == True:
-                return redirect('cv_languages') #TODO
+                return redirect('cv_languages')
             elif extras.certifications == True:
-                return redirect('cv_certifications') #TODO       
+                return redirect('cv_certifications')     
         except ObjectDoesNotExist:
             form = cvExtrasForm()
         # except MultipleObjectsReturned:
@@ -99,9 +99,9 @@ def skills(request):
             elif extras.interests == True:
                 return redirect('cv_interests')               
             elif extras.languages == True:
-                return redirect('cv_languages') #TODO
+                return redirect('cv_languages')
             elif extras.certifications == True:
-                return redirect('cv_certifications') #TODO
+                return redirect('cv_certifications')
     else:
         form = cvSkillForm()
     return render(request, 'online_cv/skills.html', {'form': form,})
@@ -117,14 +117,28 @@ def interests(request):
             if 'interest_add_another' in request.POST:
                 return redirect('cv_interests')            
             elif extras.languages == True:
-                return redirect('cv_languages') #TODO
+                return redirect('cv_languages')
             elif extras.certifications == True:
-                return redirect('cv_certifications') #TODO
+                return redirect('cv_certifications')
     else:
         form = cvInterestForm()
     return render(request, 'online_cv/interests.html', {'form': form,})
 
-# languages
+def languages(request):
+    if request.method == "POST":
+        form = cvLanguageForm(request.POST)
+        if form.is_valid():
+            cv_language = form.save(commit=False)
+            cv_language.user = request.user
+            cv_language.save()
+            extras = cvExtras.objects.get(user=request.user)
+            if 'language_add_another' in request.POST:
+                return redirect('cv_languages')            
+            elif extras.certifications == True:
+                return redirect('cv_certifications')
+    else:
+        form = cvLanguageForm()
+    return render(request, 'online_cv/languages.html', {'form': form,})
 
 def certifications(request):
     if request.method == "POST":
@@ -135,6 +149,8 @@ def certifications(request):
             cv_certification.save()
             if 'certification_add_another' in request.POST:
                 return redirect('cv_certifications')
+            else:
+                return redirect('cv_review') #TODO
     else:
         form = cvCertificationForm()
     return render(request, 'online_cv/certifications.html', {'form': form,})

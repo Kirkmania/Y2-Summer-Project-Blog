@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group, User
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
+from selenium.webdriver.support.ui import Select
 from django.utils import timezone
 import time
 #import unittest
@@ -164,10 +165,11 @@ class NewCVTest(StaticLiveServerTestCase):
         end_date.send_keys("15/09/2017")
         self.browser.find_element_by_id('submit-id-work_history_next').click()
 
-    # Next page offers optional additions, user chooses to add skills, interests and certifications
+    # Next page offers optional additions, user chooses to add skills, interests, languages and certifications (all of em)
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/extras")
         self.browser.find_element_by_xpath('/html/body/div/div/div/form/div[1]/div/label').click() # Skills
         self.browser.find_element_by_xpath('/html/body/div/div/div/form/div[2]/div/label').click() # Interests
+        self.browser.find_element_by_xpath('/html/body/div/div/div/form/div[3]/div/label').click() # Languages
         self.browser.find_element_by_xpath('/html/body/div/div/div/form/div[4]/div/label').click() # Certifications
         self.browser.find_element_by_id('submit-id-extras_next').click()
 
@@ -192,6 +194,17 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_interest').send_keys("Technology")
         self.browser.find_element_by_xpath('/html/body/div[1]/div/div/form/div[2]/div/div/div[2]/div').send_keys("I like to keep up with the latest in gadgets.") # Description
         self.browser.find_element_by_id('submit-id-interest_next').click()
+
+        # Hitting next automatically sends him to the languages page
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/languages")
+        self.browser.find_element_by_id('id_language').send_keys("French")
+        Select(self.browser.find_element_by_id('id_proficiency')).select_by_value('4')
+        self.browser.find_element_by_id('submit-id-language_add_another').click()
+
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/languages")
+        self.browser.find_element_by_id('id_language').send_keys("German")
+        Select(self.browser.find_element_by_id('id_proficiency')).select_by_value('3')
+        self.browser.find_element_by_id('submit-id-language_next').click()
 
     # Hitting next takes him to certifications
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/certifications")

@@ -11,6 +11,6 @@ urlpatterns = [
     path('extras', views.extras, name='cv_extras'),
     path('skills', views.skills, name='cv_skills'),
     path('interests', views.interests, name='cv_interests'),
-    # path('languages', views.languages, name='cv_languages'),
+    path('languages', views.languages, name='cv_languages'),
     path('certifications', views.certifications, name='cv_certifications'),
 ]

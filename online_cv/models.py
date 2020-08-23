@@ -91,3 +91,23 @@ class cvCertification(models.Model):
 
     def __str__(self):
         return self.user.get_full_name()
+
+class cvLanguage(models.Model):
+    ELEMENTARY = '1'
+    LIMITED_WORKING = '2'
+    PROFESSIONAL_WORKING = '3'
+    FULL_PROFESSIONAL = '4'
+    NATIVE_BILINGUAL = '5'
+    LANGUAGE_CHOICES = (
+        (ELEMENTARY, 'Elementary'),
+        (LIMITED_WORKING, 'Limited Working'),
+        (PROFESSIONAL_WORKING, 'Professional Working'),
+        (FULL_PROFESSIONAL, 'Full Professional'),
+        (NATIVE_BILINGUAL, 'Native/Bilingual'),
+    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    language = models.CharField(max_length=150)
+    proficiency = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='1')
+
+    def __str__(self):
+        return self.user.get_full_name()
