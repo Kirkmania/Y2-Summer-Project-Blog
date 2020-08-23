@@ -3,7 +3,8 @@ from django.urls import resolve
 from django.http import HttpRequest
 from django.contrib.auth.models import Group, User
 from django.template.loader import render_to_string
-from .forms import cvPersonalDetailsForm, cvProfileForm, cvEducationForm, cvWorkHistoryForm, cvExtrasForm
+from .forms import cvPersonalDetailsForm, cvProfileForm, cvEducationForm, cvWorkHistoryForm, cvExtrasForm, cvSkillForm, cvInterestForm
+from .models import cvSkill
 import datetime
 
 # Create your tests here.
@@ -112,7 +113,7 @@ class CVUnitTests(TestCase):
         self.assertEqual(cv_education.start_date, datetime.date(2018, 9, 23))
         self.assertEqual(cv_education.end_date, datetime.date(2019, 4, 15))
 
-    def test_extras_is_saved_and_redirects(self):
+    def test_extras_is_saved_and_redirects_correctly(self):
         c = self.client
         login = c.login(username="username", password="password")
         self.assertTrue(login)
@@ -120,7 +121,7 @@ class CVUnitTests(TestCase):
         form = cvExtrasForm({
             "skills": True, 
             "interests": True, 
-            "languages": True, 
+            "certifications": True, 
             })
 
         self.assertTrue(form.is_valid())
@@ -129,8 +130,65 @@ class CVUnitTests(TestCase):
         cv_extras.save()
         self.assertEqual(cv_extras.skills, True)
         self.assertEqual(cv_extras.interests, True)
-        self.assertEqual(cv_extras.languages, True)
-        self.assertEqual(cv_extras.certifications, False)
+        self.assertEqual(cv_extras.languages, False)
+        self.assertEqual(cv_extras.certifications, True)
+
+        # Should redirect to skills when no skills exist
         response = c.get('/cv/extras')
         self.assertRedirects(response, '/cv/skills')
+
+        # When skills object(s) exist, should redirect to interests
+        response = c.post('/cv/skills', {'skill': 'Programming', 'description': 'I can code'})
+        self.assertRedirects(response, '/cv/interests')
+
+        # When interest object(s) exist, should redirect to certs
+        response = c.post('/cv/interests', {'interest': 'Programming', 'description': 'I like code'})
+        self.assertRedirects(response, '/cv/certifications')
+
+    def test_skills_are_correctly_saved(self):
+        c = self.client
+        login = c.login(username="username", password="password")
+        self.assertTrue(login)
+
+        form = cvSkillForm({
+            "skill": "Scuba", 
+            "description": "I can scuba", 
+            })
         
+        self.assertTrue(form.is_valid())
+        cv_skill = form.save(commit=False)
+        cv_skill.user = self.user
+        cv_skill.save()
+
+        form2 = cvSkillForm({
+            "skill": "Diving", 
+            "description": "I can dive!", 
+            })
+
+        self.assertTrue(form2.is_valid())
+        cv_skill2 = form2.save(commit=False)
+        cv_skill2.user = self.user
+        cv_skill2.save()
+
+        self.assertEqual(cv_skill.skill, "Scuba")
+        self.assertEqual(cv_skill.description, "I can scuba")
+        self.assertEqual(cv_skill2.skill, "Diving")
+        self.assertEqual(cv_skill2.description, "I can dive!")
+
+    def test_interest_is_correctly_saved(self):
+        c = self.client
+        login = c.login(username="username", password="password")
+        self.assertTrue(login)
+
+        form = cvInterestForm({
+            "interest": "Esports", 
+            "description": "Who's more popular, Shroud or Faker?", 
+            })
+        
+        self.assertTrue(form.is_valid())
+        cv_interest = form.save(commit=False)
+        cv_interest.user = self.user
+        cv_interest.save()
+
+        self.assertEqual(cv_interest.interest, "Esports")
+        self.assertEqual(cv_interest.description, "Who's more popular, Shroud or Faker?")

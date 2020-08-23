@@ -121,14 +121,26 @@ class cvExtrasForm(forms.ModelForm):
         model = cvExtras
         fields = ('skills', 'interests', 'languages', 'certifications',)
 
-class cvSkillsForm(forms.ModelForm):
+class cvSkillForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('skills_add', 'Save and add another'))
-        self.helper.add_input(Submit('skills_next', 'Next'))
+        self.helper.add_input(Submit('skill_add_another', 'Save and add another'))
+        self.helper.add_input(Submit('skill_next', 'Next'))
 
     class Meta:
-        model = cvSkills
+        model = cvSkill
         fields = ('skill', 'description',)
+
+class cvInterestForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('interest_add_another', 'Save and add another'))
+        self.helper.add_input(Submit('interest_next', 'Next'))
+
+    class Meta:
+        model = cvInterest
+        fields = ('interest', 'description',)

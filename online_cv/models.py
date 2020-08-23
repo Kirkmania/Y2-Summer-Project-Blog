@@ -66,9 +66,17 @@ class cvExtras(models.Model):
     def __str__(self):
         return self.user.get_full_name()
 
-class cvSkills(models.Model):
+class cvSkill(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     skill = models.CharField(max_length=100)
+    description = CKEditor5Field('Description', config_name='default', blank=True)
+
+    def __str__(self):
+        return self.user.get_full_name()
+
+class cvInterest(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    interest = models.CharField(max_length=100)
     description = CKEditor5Field('Description', config_name='default', blank=True)
 
     def __str__(self):

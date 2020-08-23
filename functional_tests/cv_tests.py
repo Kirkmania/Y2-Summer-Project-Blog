@@ -173,9 +173,42 @@ class NewCVTest(StaticLiveServerTestCase):
 
     # Add skills form, optional skill descriptions ? and ratings of proficiency?
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/skills")
-        self.fail("finish the test!")
+        self.browser.find_element_by_id('id_skill').send_keys("Scuba")
+        self.browser.find_element_by_xpath('/html/body/div[1]/div/div/form/div[2]/div/div/div[2]/div').send_keys("I can scuba!") # Description
+        self.browser.find_element_by_id('submit-id-skill_add_another').click()
+
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/skills")
+        self.browser.find_element_by_id('id_skill').send_keys("Piano")
+        self.browser.find_element_by_xpath('/html/body/div[1]/div/div/form/div[2]/div/div/div[2]/div').send_keys("Grade 8 piano") # Description
+        self.browser.find_element_by_id('submit-id-skill_next').click()
 
     # Hitting next automatically sends him to the interests page
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/interests")
+        self.browser.find_element_by_id('id_interest').send_keys("Gaming")
+        self.browser.find_element_by_xpath('/html/body/div[1]/div/div/form/div[2]/div/div/div[2]/div').send_keys("Imma gamer") # Description
+        self.browser.find_element_by_id('submit-id-interest_add_another').click()
+
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/interests")
+        self.browser.find_element_by_id('id_interest').send_keys("Technology")
+        self.browser.find_element_by_xpath('/html/body/div[1]/div/div/form/div[2]/div/div/div[2]/div').send_keys("I like to keep up with the latest in gadgets.") # Description
+        self.browser.find_element_by_id('submit-id-interest_next').click()
+
+    # Hitting next takes him to certifications
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/certifications")
+        self.browser.find_element_by_id('id_certification').send_keys("Insomnia 64 PUBG Solos Golden Pan Winner")
+        date = self.browser.find_element_by_id('id_date')
+        for x in range(10):
+            date.send_keys(Keys.BACKSPACE)
+        date.send_keys("19/07/2017")
+        self.browser.find_element_by_id('submit-id-certification_add_another').click()
+
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/certifications")
+        self.browser.find_element_by_id('id_certification').send_keys("Piano Grade 3")
+        date = self.browser.find_element_by_id('id_date')
+        for x in range(10):
+            date.send_keys(Keys.BACKSPACE)
+        date.send_keys("19/07/2010")
+        self.browser.find_element_by_id('submit-id-certification_next').click()
+        self.fail("finish the test!")
 
     # He is met with a formatted version of his cv (NOTE: exportable to pdf if possible!)
