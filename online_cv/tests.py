@@ -3,7 +3,7 @@ from django.urls import resolve
 from django.http import HttpRequest
 from django.contrib.auth.models import Group, User
 from django.template.loader import render_to_string
-from .forms import cvPersonalDetailsForm, cvProfileForm, cvEducationForm, cvWorkHistoryForm
+from .forms import cvPersonalDetailsForm, cvProfileForm, cvEducationForm, cvWorkHistoryForm, cvExtrasForm
 import datetime
 
 # Create your tests here.
@@ -111,3 +111,26 @@ class CVUnitTests(TestCase):
         self.assertEqual(cv_education.description, "<p>This is some example job text.</p>")
         self.assertEqual(cv_education.start_date, datetime.date(2018, 9, 23))
         self.assertEqual(cv_education.end_date, datetime.date(2019, 4, 15))
+
+    def test_extras_is_saved_and_redirects(self):
+        c = self.client
+        login = c.login(username="username", password="password")
+        self.assertTrue(login)
+
+        form = cvExtrasForm({
+            "skills": True, 
+            "interests": True, 
+            "languages": True, 
+            })
+
+        self.assertTrue(form.is_valid())
+        cv_extras = form.save(commit=False)
+        cv_extras.user = self.user
+        cv_extras.save()
+        self.assertEqual(cv_extras.skills, True)
+        self.assertEqual(cv_extras.interests, True)
+        self.assertEqual(cv_extras.languages, True)
+        self.assertEqual(cv_extras.certifications, False)
+        response = c.get('/cv/extras')
+        self.assertRedirects(response, '/cv/skills')
+        

@@ -164,12 +164,18 @@ class NewCVTest(StaticLiveServerTestCase):
         end_date.send_keys("15/09/2017")
         self.browser.find_element_by_id('submit-id-work_history_next').click()
 
-    # Next page offers optional additions, user chooses to add skills
+    # Next page offers optional additions, user chooses to add skills, interests and certifications
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/extras")
+        self.browser.find_element_by_xpath('/html/body/div/div/div/form/div[1]/div/label').click() # Skills
+        self.browser.find_element_by_xpath('/html/body/div/div/div/form/div[2]/div/label').click() # Interests
+        self.browser.find_element_by_xpath('/html/body/div/div/div/form/div[4]/div/label').click() # Certifications
+        self.browser.find_element_by_id('submit-id-extras_next').click()
+
+    # Add skills form, optional skill descriptions ? and ratings of proficiency?
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/skills")
         self.fail("finish the test!")
-    # Add skills form, optional skill descriptions ? and ratings of proficiency
 
-    # Back on the additional extras, now he picks interests and fills out some interests
-
-    # Finally, back on the additional extras he has no more to add, and hits "finish" 
+    # Hitting next automatically sends him to the interests page
+        self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/interests")
 
     # He is met with a formatted version of his cv (NOTE: exportable to pdf if possible!)

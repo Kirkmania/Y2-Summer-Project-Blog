@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 from bootstrap_datepicker_plus import DatePickerInput
-from .models import CV, cvPersonalDetails, cvProfile, cvEducation, cvWorkHistory
+from .models import *
 
 class CVForm(forms.ModelForm):
 
@@ -109,3 +109,26 @@ class cvWorkHistoryForm(forms.ModelForm):
             'start_date': DatePickerInput(options={"format": "DD/MM/YYYY"}),
             'end_date': DatePickerInput(options={"format": "DD/MM/YYYY"})
             }
+
+class cvExtrasForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('extras_next', 'Next'))
+
+    class Meta:
+        model = cvExtras
+        fields = ('skills', 'interests', 'languages', 'certifications',)
+
+class cvSkillsForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('skills_add', 'Save and add another'))
+        self.helper.add_input(Submit('skills_next', 'Next'))
+
+    class Meta:
+        model = cvSkills
+        fields = ('skill', 'description',)

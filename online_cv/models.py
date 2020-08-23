@@ -55,3 +55,21 @@ class cvWorkHistory(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.user.get_full_name(), self.job_title)
+
+class cvExtras(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    skills = models.BooleanField(default=False)
+    interests = models.BooleanField(default=False)
+    languages = models.BooleanField(default=False)
+    certifications = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.get_full_name()
+
+class cvSkills(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    skill = models.CharField(max_length=100)
+    description = CKEditor5Field('Description', config_name='default', blank=True)
+
+    def __str__(self):
+        return self.user.get_full_name()
