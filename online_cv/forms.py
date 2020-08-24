@@ -50,15 +50,19 @@ class cvEducationForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                Column('school', css_class='form-group col-md-6 mb-0'),
+                Column('school', css_class='form-group col-md-4 mb-0'),
                 Column('location', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('level_of_study', css_class='form-group col-md-4 mb-0'),
+                Column('start_date', css_class='form-group col-md-2 mb-0'),
+                Column('end_date', css_class='form-group col-md-2 mb-0'),
                 css_class='form-row'
             ),
             Row(
                 Column('subject', css_class='form-group col-md-4 mb-0'),
                 Column('grade', css_class='form-group col-md-2 mb-0'),
-                Column('start_date', css_class='form-group col-md-2 mb-0'),
-                Column('end_date', css_class='form-group col-md-2 mb-0'),
                 css_class='form-row'
             ),
             Submit('education_save_and_add', 'Save and add', css_class='btn btn-secondary'),
@@ -67,7 +71,7 @@ class cvEducationForm(forms.ModelForm):
 
     class Meta:
         model = cvEducation
-        fields = ('school', 'location', 'subject', 'grade', 'start_date', 'end_date',)
+        fields = ('school', 'location', 'level_of_study', 'subject', 'grade', 'start_date', 'end_date',)
         widgets = {
             'start_date': DatePickerInput(options={"format": "DD/MM/YYYY"}),
             'end_date': DatePickerInput(options={"format": "DD/MM/YYYY"})

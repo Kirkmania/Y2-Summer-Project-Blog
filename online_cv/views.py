@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from .forms import *
+from blog.models import Post
 from .models import *
 
 # Create your views here.
@@ -150,7 +151,30 @@ def certifications(request):
             if 'certification_add_another' in request.POST:
                 return redirect('cv_certifications')
             else:
-                return redirect('cv_review') #TODO
+                return redirect('cv_preview')
     else:
         form = cvCertificationForm()
     return render(request, 'online_cv/certifications.html', {'form': form,})
+
+def preview(request):
+    personal_details = cvPersonalDetails.objects.get(user=request.user)
+    profile = cvProfile.objects.get(user=request.user)
+    educations = cvEducation.objects.filter(user=request.user).order_by('-start_date')
+    jobs = cvWorkHistory.objects.filter(user=request.user).order_by('-start_date')
+    extras = cvExtras.objects.get(user=request.user)
+    skills = cvSkill.objects.filter(user=request.user)
+    interests = cvInterest.objects.filter(user=request.user)
+    certifications = cvCertification.objects.filter(user=request.user).order_by('-date')
+    languages = cvLanguage.objects.filter(user=request.user)
+
+    return render(request, 'online_cv/preview.html', {
+        'personal_details': personal_details,
+        'profile': profile,
+        'educations': educations,
+        'jobs': jobs,
+        'extras': extras,
+        'skills': skills,
+        'interests': interests,
+        'certifications': certifications,
+        'languages': languages,
+    })

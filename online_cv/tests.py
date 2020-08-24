@@ -71,6 +71,7 @@ class CVUnitTests(TestCase):
         form = cvEducationForm({
             "school": "Schoolname", 
             "location": "Schoolplace", 
+            "level_of_study": "A Level",
             "subject": "Computer Science", 
             "grade": "First", 
             "start_date": "23/09/2018", 
@@ -84,6 +85,7 @@ class CVUnitTests(TestCase):
         self.assertEqual(cv_education.school, "Schoolname")
         self.assertEqual(cv_education.location, "Schoolplace")
         self.assertEqual(cv_education.subject, "Computer Science")
+        self.assertEqual(cv_education.level_of_study, "A Level")
         self.assertEqual(cv_education.grade, "First")
         self.assertEqual(cv_education.start_date, datetime.date(2018, 9, 23))
         self.assertEqual(cv_education.end_date, datetime.date(2021, 4, 15))

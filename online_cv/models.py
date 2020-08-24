@@ -36,13 +36,14 @@ class cvEducation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     school = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
+    level_of_study = models.CharField(max_length=100)
     subject = models.CharField(max_length=100)
-    grade = models.CharField(max_length=100)
+    grade = models.CharField(max_length=100, blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return '%s %s' % (self.user.get_full_name(), self.subject)
+        return '%s: %s' % (self.user.get_full_name(), self.subject)
 
 class cvWorkHistory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -54,7 +55,7 @@ class cvWorkHistory(models.Model):
     end_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return '%s %s' % (self.user.get_full_name(), self.job_title)
+        return '%s: %s' % (self.user.get_full_name(), self.job_title)
 
 class cvExtras(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -72,7 +73,7 @@ class cvSkill(models.Model):
     description = CKEditor5Field('Description', config_name='default', blank=True)
 
     def __str__(self):
-        return self.user.get_full_name()
+        return '%s: %s' % (self.user.get_full_name(), self.skill)
 
 class cvInterest(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -80,9 +81,8 @@ class cvInterest(models.Model):
     description = CKEditor5Field('Description', config_name='default', blank=True)
 
     def __str__(self):
-        return self.user.get_full_name()
+        return '%s: %s' % (self.user.get_full_name(), self.interest)
 
-#language
 
 class cvCertification(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -90,24 +90,19 @@ class cvCertification(models.Model):
     certification = models.CharField(max_length=150)
 
     def __str__(self):
-        return self.user.get_full_name()
+        return '%s: %s' % (self.user.get_full_name(), self.certification)
 
 class cvLanguage(models.Model):
-    ELEMENTARY = '1'
-    LIMITED_WORKING = '2'
-    PROFESSIONAL_WORKING = '3'
-    FULL_PROFESSIONAL = '4'
-    NATIVE_BILINGUAL = '5'
     LANGUAGE_CHOICES = (
-        (ELEMENTARY, 'Elementary'),
-        (LIMITED_WORKING, 'Limited Working'),
-        (PROFESSIONAL_WORKING, 'Professional Working'),
-        (FULL_PROFESSIONAL, 'Full Professional'),
-        (NATIVE_BILINGUAL, 'Native/Bilingual'),
+        ('Elementary', 'Elementary'),
+        ('Limited Working', 'Limited Working'),
+        ('Professional Working', 'Professional Working'),
+        ('Full Professional', 'Full Professional'),
+        ('Native/Bilingual', 'Native/Bilingual'),
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     language = models.CharField(max_length=150)
     proficiency = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='1')
 
     def __str__(self):
-        return self.user.get_full_name()
+        return '%s: %s' % (self.user.get_full_name(), self.language)

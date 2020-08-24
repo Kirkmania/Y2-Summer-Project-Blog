@@ -21,6 +21,8 @@ class NewCVTest(StaticLiveServerTestCase):
             email='test1@test1.com',
         )
 
+        self.client.login(username='Kassandra', password='malaka')
+
     def tearDown(self):
         self.browser.quit()
 
@@ -64,16 +66,12 @@ class NewCVTest(StaticLiveServerTestCase):
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
         self.browser.find_element_by_id('id_school').send_keys("University of Birmingham")
         self.browser.find_element_by_id('id_location').send_keys("Birmingham")
-        self.browser.find_element_by_id('id_subject').send_keys("BSc Computer Science")
-        self.browser.find_element_by_id('id_grade').send_keys("First")
+        self.browser.find_element_by_id('id_level_of_study').send_keys("BSc Degree")
+        self.browser.find_element_by_id('id_subject').send_keys("Computer Science")
         start_date = self.browser.find_element_by_id('id_start_date')
-        end_date = self.browser.find_element_by_id('id_end_date')
         for x in range(10):
             start_date.send_keys(Keys.BACKSPACE)
         start_date.send_keys("23/09/2018")
-        for x in range(10):
-            end_date.send_keys(Keys.BACKSPACE)
-        end_date.send_keys("15/04/2021")
         self.browser.find_element_by_id('submit-id-education_save_and_add').click()
         
     # He also enters his A Levels
@@ -81,6 +79,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
         self.browser.find_element_by_id('id_school').send_keys("Rickmansworth 6th Form")
         self.browser.find_element_by_id('id_location').send_keys("Watford")
+        self.browser.find_element_by_id('id_level_of_study').send_keys("A Level")
         self.browser.find_element_by_id('id_subject').send_keys("Chemistry")
         self.browser.find_element_by_id('id_grade').send_keys("B")
         start_date = self.browser.find_element_by_id('id_start_date')
@@ -97,6 +96,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
         self.browser.find_element_by_id('id_school').send_keys("Rickmansworth 6th Form")
         self.browser.find_element_by_id('id_location').send_keys("Watford")
+        self.browser.find_element_by_id('id_level_of_study').send_keys("A Level")
         self.browser.find_element_by_id('id_subject').send_keys("Physics")
         self.browser.find_element_by_id('id_grade').send_keys("A")
         start_date = self.browser.find_element_by_id('id_start_date')
@@ -113,6 +113,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/education")
         self.browser.find_element_by_id('id_school').send_keys("Rickmansworth 6th Form")
         self.browser.find_element_by_id('id_location').send_keys("Watford")
+        self.browser.find_element_by_id('id_level_of_study').send_keys("A Level")
         self.browser.find_element_by_id('id_subject').send_keys("Mathematics")
         self.browser.find_element_by_id('id_grade').send_keys("A")
         start_date = self.browser.find_element_by_id('id_start_date')
@@ -130,10 +131,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_job_title').send_keys("Visitor Experience Helper")
         self.browser.find_element_by_id('id_employer').send_keys("The Science Museum")
         self.browser.find_element_by_id('id_city').send_keys("London")
-        self.browser.find_element_by_class_name('ck-content').send_keys("I worked as a volunteer in the “Visitor Experience” team for the Science Museum’s Power Up exhibition."
-            + Keys.ENTER + "1. Recounting the history of video-gaming to any interested visitors and discussing any areas of the history of the games and esports industry."
-            + Keys.ENTER + "2. Helping parents and their children to connect by translating the child's passion and gaming experience into more understandable terms for the parents."
-            + Keys.ENTER + "3. Introducing visitors to consoles or games they have never seen before and teaching their significance in the development of the industry.")
+        self.browser.find_element_by_class_name('ck-content').send_keys("I worked as a volunteer in the “Visitor Experience” team for the Science Museum’s Power Up exhibition.")
         start_date = self.browser.find_element_by_id('id_start_date')
         end_date = self.browser.find_element_by_id('id_end_date')
         for x in range(10):
@@ -150,11 +148,7 @@ class NewCVTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_job_title').send_keys("Sales Representative")
         self.browser.find_element_by_id('id_employer').send_keys("Three")
         self.browser.find_element_by_id('id_city').send_keys("Watford")
-        self.browser.find_element_by_class_name('ck-content').send_keys("I worked as a part of the sales team in the Three mobile carrier shop in the high street's shopping centre." 
-            + Keys.ENTER + "1. Curabitur eleifend arcu quis neque vehicula dapibus."
-            + Keys.ENTER + "2. Duis hendrerit lectus ut eleifend tincidunt."
-            + Keys.ENTER + "3. Maecenas et massa congue, pharetra nibh vitae, ultricies augue."
-            + Keys.ENTER + "4. Integer sit amet est id lectus ornare vestibulum eget ac ipsum.")
+        self.browser.find_element_by_class_name('ck-content').send_keys("I worked as a part of the sales team in the Three mobile carrier shop in the high street's shopping centre.")
         start_date = self.browser.find_element_by_id('id_start_date')
         end_date = self.browser.find_element_by_id('id_end_date')
         for x in range(10):
@@ -198,12 +192,12 @@ class NewCVTest(StaticLiveServerTestCase):
         # Hitting next automatically sends him to the languages page
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/languages")
         self.browser.find_element_by_id('id_language').send_keys("French")
-        Select(self.browser.find_element_by_id('id_proficiency')).select_by_value('4')
+        Select(self.browser.find_element_by_id('id_proficiency')).select_by_value('Full Professional')
         self.browser.find_element_by_id('submit-id-language_add_another').click()
 
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/languages")
         self.browser.find_element_by_id('id_language').send_keys("German")
-        Select(self.browser.find_element_by_id('id_proficiency')).select_by_value('3')
+        Select(self.browser.find_element_by_id('id_proficiency')).select_by_value('Elementary')
         self.browser.find_element_by_id('submit-id-language_next').click()
 
     # Hitting next takes him to certifications
@@ -223,6 +217,21 @@ class NewCVTest(StaticLiveServerTestCase):
             date.send_keys(Keys.BACKSPACE)
         date.send_keys("19/07/2010")
         self.browser.find_element_by_id('submit-id-certification_next').click()
+
+    # BIG CHECK TIME let's see if all the text George filled in is present!
+        response = self.client.get('/cv/preview')
+        self.assertContains(response, "This is my profile bio lorem ipsum cheeki breeki iv damke pogchampion my duderino. That's my secret, captain, I'm always angry. How much wood could a woodchuck chuck if a woodchuck could chuck wood?")
+        self.assertContains(response,"Scuba")
+        self.assertContains(response,"I can scuba!")
+        self.assertContains(response,"Gaming")
+        self.assertContains(response,"Imma gamer")
+        self.assertContains(response,"French")
+        self.assertContains(response,"Full Professional")
+        self.assertContains(response,"Piano Grade 3")
+        self.assertContains(response,"19 Jul 2010")
+        self.assertContains(response,"BSc Degree: Computer Science (currently studying) at University of Birmingham, Birmingham")
+        self.assertContains(response,"<strong>Visitor Experience Helper</strong>, The Science Museum, London")
+        self.assertContains(response,"I worked as a volunteer in the “Visitor Experience” team for the Science Museum’s Power Up exhibition.")
         self.fail("finish the test!")
 
     # He is met with a formatted version of his cv (NOTE: exportable to pdf if possible!)

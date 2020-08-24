@@ -1,0 +1,51 @@
+{% extends 'blog/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+</div></div>
+<div class="col-md-10"> 
+<h1 style="text-align:center;"><span style="color:black;">{{ personal_details.first_name }} {{ personal_details.last_name }}</span></h1>
+<p style="text-align:center;"><span style="color:#666666;">{{ personal_details.city}}, {{ personal_details.postcode }} | {{ personal_details.phone_number }} | {{ personal_details.email }}</span></p>
+<h4><span style="color:#666666;">Profile</span></h4>
+<hr>
+<p>{{ profile.text|safe }}</p>
+<!-- <p style="margin-left:21.3pt;">&nbsp;</p> -->
+<h4><span style="color:#666666;">Skills</span></h4><hr>
+<ul>
+  {% for skill in skills %}
+  <li><strong>{{ skill.skill }}: </strong>{{ skill.description|safe }}</li>
+  {% endfor %}
+</ul>
+<h4><span style="color:#666666;">Interests</span></h4><hr>
+<ul>
+  {% for interest in interests %}
+  <li><strong>{{ interest.interest }}: </strong>{{ interest.description|safe }}</li>
+  {% endfor %}
+</ul>
+<h4><span style="color:#666666;">Languages</span></h4><hr>
+<ul>
+  {% for language in languages %}
+  <li><strong>{{ language.language }}: </strong>{{ language.proficiency }}</li>
+  {% endfor %}
+</ul>
+<h4><span style="color:#666666;">Certifications</span></h4><hr>
+<ul>
+  {% for certification in certifications %}
+  <li><strong>{{ certification.certification }} </strong><span class="text-muted">{{ certification.date }}</span></li>
+  {% endfor %}
+</ul>
+<h4><span style="color:#666666;">Education</span></h4><hr>
+<ul>
+  {% for education in educations %}
+  <li>
+    {{ education.level_of_study }}: {{ education.subject }} ({% if education.grade %}{{ education.grade }}{% else %}currently studying{% endif %}) at {{ education.school }}, {{ education.location }} <span class="text-muted"> {{ education.start_date }} - {% if education.end_date %}{{ education.end_date }}{% else %}present{% endif %}</span>
+  </li>
+  {% endfor %}
+</ul>
+<h4><span style="color:#666666;">Employment History</span></h4><hr>
+{% for job in jobs %}
+<h5><strong>{{ job.job_title }}</strong>, {{ job.employer }}, {{ job.city }} <span class="text-muted"> {{ job.start_date }} - {% if job.end_date %}{{ job.end_date }}{% else %}present{% endif %}</span></h5>
+{{ job.description|safe }}
+{% endfor %}
+{% endblock %}

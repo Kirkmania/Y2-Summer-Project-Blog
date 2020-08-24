@@ -13,4 +13,5 @@ urlpatterns = [
     path('interests', views.interests, name='cv_interests'),
     path('languages', views.languages, name='cv_languages'),
     path('certifications', views.certifications, name='cv_certifications'),
+    path('preview', views.preview, name='cv_preview'),
 ]

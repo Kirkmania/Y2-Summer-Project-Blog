@@ -1,7 +1,8 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-	<h1>CV Builder</h1>
+  <h1>CV Builder</h1>
+  <h4>Profile</h4>
   <div class="form-group">
     <form method="POST" class="post-form">{% csrf_token %}
       {{ form.media }}
