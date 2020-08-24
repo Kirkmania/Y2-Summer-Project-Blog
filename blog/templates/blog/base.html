@@ -36,16 +36,8 @@
                 </li>
                 <!-- Settings Dropdown -->
                 {% if perms.blog.manage_posts %}
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-cog"></i> Admin Settings
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="{% url 'add_category' %}"><i class="fas fa-folder-plus"></i> Add Category</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#"><i class="fas fa-american-sign-language-interpreting"></i> Final option</a>
-                    </div>
+                  <li>
+                      <a class="nav-link" href="/admin"><i class="fas fa-cog"></i> Admin Settings</a>
                   </li>
                 {% endif %}
                 {% if request.user|has_group:"author" or request.user|has_group:"admin" %}
