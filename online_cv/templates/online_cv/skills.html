@@ -7,6 +7,22 @@
 {% endblock %}
 
 {% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'cv_personal_details' %}">Personal Details</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_profile' %}">Profile</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_education' %}">Education</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_jobs' %}">Employment History</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_extras_edit' %}">Extras</a></li>
+    <li class="breadcrumb-item active"><span class="bg-secondary rounded text-light">&nbsp;Skills&nbsp;</span></li>
+    <li class="breadcrumb-item active">Interests</li>
+    <li class="breadcrumb-item active">Languages</li>
+    <li class="breadcrumb-item active">Certifications</li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_preview' %}">Preview</a></li>
+    <li class="breadcrumb-item active">Done!</li>
+  </ol>
+</nav>
+
 <div class="content container">
   <h1>CV Builder</h1>
   <h4>View your current skills or add a new one</h4>
@@ -28,7 +44,7 @@
     data-url="{% url 'cv_skill_create' %}" id="id_add_skill">
       <i class="fas fa-plus"></i> Add a new Skill
     </button>
-    <a href="{% url 'cv_extras' %}" class="btn btn-secondary" style="float:right;" id="id_next">Next</button></a>
+    <a href="{% url 'cv_skills_next' %}" class="btn btn-secondary" style="float:right;" id="id_next">Next</button></a>
   </p>
 
   <div class="modal fade" id="modal-skill">

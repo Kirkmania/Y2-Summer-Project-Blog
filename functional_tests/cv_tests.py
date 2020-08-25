@@ -51,9 +51,11 @@ class NewCVTest(StaticLiveServerTestCase):
         start_new_cv_button = self.browser.find_element_by_id('start_new_cv')
         edit_existing_cv_button = self.browser.find_element_by_id('view_existing_cv')
         start_new_cv_button.click()
+        self.browser.find_element_by_id('start_new_cv_confirm').click()
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/personal_details")
 
     # He finds the personal details section and inputs his data and hits next
+        time.sleep(MODAL_HIDE_TIME)
         self.browser.find_element_by_id('id_first_name').send_keys("George")
         self.browser.find_element_by_id('id_last_name').send_keys("Kirkman")
         self.browser.find_element_by_id('id_profession').send_keys("Student")
@@ -168,8 +170,6 @@ class NewCVTest(StaticLiveServerTestCase):
         end_date.send_keys("23/04/2016")
         self.browser.find_element_by_class_name('modal-header').click()
         self.browser.find_element_by_id('id_confirm_job').click()
-
-    # He has to enter some details/description of the job on the next page (richtext editor) TODO: currently on previous page, does it need separation?
 
     # He has the opporunity to add another, and takes it
         time.sleep(MODAL_HIDE_TIME)

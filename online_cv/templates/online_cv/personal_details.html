@@ -3,6 +3,22 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><span class="bg-secondary rounded text-light">&nbsp;Personal Details&nbsp;</span></li>
+    <li class="breadcrumb-item active">Profile</li>
+    <li class="breadcrumb-item active">Education</li>
+    <li class="breadcrumb-item active">Employment History</li>
+    <li class="breadcrumb-item active">Extras</li>
+    <li class="breadcrumb-item active">Skills</li>
+    <li class="breadcrumb-item active">Interests</li>
+    <li class="breadcrumb-item active">Languages</li>
+    <li class="breadcrumb-item active">Certifications</li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_preview' %}">Preview</a></li>
+    <li class="breadcrumb-item active">Done!</li>
+  </ol>
+</nav>
+
 <div class="content container">
   <h1>CV Builder</h1>
   <h4>Personal Details</h4>

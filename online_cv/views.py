@@ -10,34 +10,107 @@ from .models import *
 # Create your views here.
 @login_required
 def cv_builder(request):
-    form = CVForm()
-    return render(request, 'online_cv/cv_builder.html', {'form': form})
+    return render(request, 'online_cv/cv_builder.html')
 
+@login_required
+def start_new(request):
+    educations = cvEducation.objects.filter(user=request.user).order_by('-start_date')
+    jobs = cvWorkHistory.objects.filter(user=request.user).order_by('-start_date')
+    skills = cvSkill.objects.filter(user=request.user)
+    interests = cvInterest.objects.filter(user=request.user)
+    certifications = cvCertification.objects.filter(user=request.user).order_by('-date')
+    languages = cvLanguage.objects.filter(user=request.user)
+
+    try:
+        personal_details = cvPersonalDetails.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        personal_details = False
+    try:
+        profile = cvProfile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        profile = False
+    try:
+        extras = cvExtras.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        extras = False
+
+    if educations:
+        for education in educations:
+            education.delete()
+    if jobs:
+        for job in jobs:
+            job.delete()
+    if skills:
+        for skill in skills:
+            skill.delete()
+    if interests:
+        for interest in interests:
+            interest.delete()
+    if certifications:
+        for certification in certifications:
+            certification.delete()
+    if languages:
+        for language in languages:
+            language.delete()
+    if personal_details:
+        personal_details.delete()
+    if profile:
+        profile.delete()
+    if extras:
+        extras.delete()
+
+    return redirect('cv_personal_details')
+
+
+@login_required
 def personal_details(request):
-    if request.method == "POST":
-        form = cvPersonalDetailsForm(request.POST)
-        if form.is_valid():
-            cv_personal_details = form.save(commit=False)
-            cv_personal_details.user = request.user
-            cv_personal_details.save()
-            return redirect('cv_profile')
-    else:
-        form = cvPersonalDetailsForm()
-    return render(request, 'online_cv/personal_details.html', {'form': form})
+    try: 
+        personal_details = cvPersonalDetails.objects.get(user=request.user)
+        if request.method == "POST":
+            form = cvPersonalDetailsForm(request.POST, instance=personal_details)
+            if form.is_valid():
+                form.save()
+                return redirect('cv_profile')
+        else:
+            form = cvPersonalDetailsForm(instance=personal_details)
+        return render(request, 'online_cv/personal_details.html', {'form': form})
+    except ObjectDoesNotExist:
+        if request.method == "POST":
+            form = cvPersonalDetailsForm(request.POST)
+            if form.is_valid():
+                cv_personal_details = form.save(commit=False)
+                cv_personal_details.user = request.user
+                cv_personal_details.save()
+                return redirect('cv_profile')
+        else:
+            form = cvPersonalDetailsForm()
+        return render(request, 'online_cv/personal_details.html', {'form': form})
 
+@login_required
 def profile(request):
-    if request.method == "POST":
-        form = cvProfileForm(request.POST)
-        if form.is_valid():
-            cv_profile = form.save(commit=False)
-            cv_profile.user = request.user
-            cv_profile.save()
-            return redirect('cv_education')
-    else:
-        form = cvProfileForm()
-    return render(request, 'online_cv/profile.html', {'form': form})
+    try: 
+        profile = cvProfile.objects.get(user=request.user)
+        if request.method == "POST":
+            form = cvProfileForm(request.POST, instance=profile)
+            if form.is_valid():
+                form.save()
+                return redirect('cv_education')
+        else:
+            form = cvProfileForm(instance=profile)
+        return render(request, 'online_cv/profile.html', {'form': form})
+    except ObjectDoesNotExist:
+        if request.method == "POST":
+            form = cvProfileForm(request.POST)
+            if form.is_valid():
+                cv_profile = form.save(commit=False)
+                cv_profile.user = request.user
+                cv_profile.save()
+                return redirect('cv_education')
+        else:
+            form = cvProfileForm()
+        return render(request, 'online_cv/profile.html', {'form': form})
 
-
+@login_required
 def extras(request):
     if request.method == "POST":
         form = cvExtrasForm(request.POST)
@@ -49,13 +122,13 @@ def extras(request):
     else:
         try:
             extras = cvExtras.objects.get(user=request.user)
-            if extras.skills == True and not cvSkill.objects.filter(user=request.user):
+            if extras.skills == True:
                 return redirect('cv_skills')
-            elif extras.interests == True and not cvInterest.objects.filter(user=request.user):
+            elif extras.interests == True:
                 return redirect('cv_interests')               
-            elif extras.languages == True and not cvLanguage.objects.filter(user=request.user):
+            elif extras.languages == True:
                 return redirect('cv_languages')
-            elif extras.certifications == True and not cvCertification.objects.filter(user=request.user):
+            elif extras.certifications == True:
                 return redirect('cv_certifications')
             else:
                 return redirect('cv_preview')
@@ -64,16 +137,46 @@ def extras(request):
         # except MultipleObjectsReturned:
     return render(request, 'online_cv/extras.html', {'form': form,})
 
+@login_required
+def extras_edit(request):
+    try:
+        extras = cvExtras.objects.get(user=request.user)
+    except:
+        return redirect('cv_extras')
+    if request.method == "POST":
+        form = cvExtrasForm(request.POST, instance=extras)
+        if form.is_valid():
+            cv_extras = form.save(commit=False)
+            cv_extras.user = request.user
+            cv_extras.save()
+            return redirect('cv_extras')
+    else:
+        form = cvExtrasForm(instance=extras)
+        # except MultipleObjectsReturned:
+    return render(request, 'online_cv/extras.html', {'form': form,})
+
+@login_required
 def preview(request):
-    personal_details = cvPersonalDetails.objects.get(user=request.user)
-    profile = cvProfile.objects.get(user=request.user)
     educations = cvEducation.objects.filter(user=request.user).order_by('-start_date')
     jobs = cvWorkHistory.objects.filter(user=request.user).order_by('-start_date')
-    extras = cvExtras.objects.get(user=request.user)
     skills = cvSkill.objects.filter(user=request.user)
     interests = cvInterest.objects.filter(user=request.user)
     certifications = cvCertification.objects.filter(user=request.user).order_by('-date')
     languages = cvLanguage.objects.filter(user=request.user)
+
+    try:
+        personal_details = cvPersonalDetails.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        personal_details = False
+    try:
+        profile = cvProfile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        profile = False
+
+    try:
+        extras = cvExtras.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        extras = False
 
     return render(request, 'online_cv/preview.html', {
         'personal_details': personal_details,
@@ -88,10 +191,12 @@ def preview(request):
     })
 
 ################ Interests views ####################
+@login_required
 def interests(request):
     interests = cvInterest.objects.filter(user=request.user)
     return render(request, 'online_cv/interests.html', {'interests': interests})
 
+@login_required
 def save_interest_form(request, form, template_name):
     data = dict()
 
@@ -112,6 +217,7 @@ def save_interest_form(request, form, template_name):
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 
+@login_required
 def interest_create(request):
     if request.method == 'POST':
         form = cvInterestForm(request.POST)
@@ -119,6 +225,7 @@ def interest_create(request):
         form = cvInterestForm()
     return save_interest_form(request, form, 'online_cv/includes/interests/partial_interest_create.html')
 
+@login_required
 def interest_edit(request, pk):
     interest = get_object_or_404(cvInterest, pk=pk)
     if request.method == 'POST':
@@ -127,6 +234,7 @@ def interest_edit(request, pk):
         form = cvInterestForm(instance=interest)
     return save_interest_form(request, form, 'online_cv/includes/interests/partial_interest_edit.html')
 
+@login_required
 def interest_delete(request, pk):
     interest = get_object_or_404(cvInterest, pk=pk)
     data = dict()
@@ -145,11 +253,26 @@ def interest_delete(request, pk):
         )
     return JsonResponse(data)
 
+@login_required
+def interest_next(request):
+    try:
+        extras = cvExtras.objects.get(user=request.user)             
+        if extras.languages == True:
+            return redirect('cv_languages')
+        elif extras.certifications == True:
+            return redirect('cv_certifications')
+        else:
+            return redirect('cv_preview')
+    except ObjectDoesNotExist:
+        return render(request, 'online_cv/extras_404.html')
+
 ################ Skills views ####################
+@login_required
 def skills(request):
     skills = cvSkill.objects.filter(user=request.user)
     return render(request, 'online_cv/skills.html', {'skills': skills})
 
+@login_required
 def save_skill_form(request, form, template_name):
     data = dict()
 
@@ -170,6 +293,7 @@ def save_skill_form(request, form, template_name):
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 
+@login_required
 def skill_create(request):
     if request.method == 'POST':
         form = cvSkillForm(request.POST)
@@ -177,6 +301,7 @@ def skill_create(request):
         form = cvSkillForm()
     return save_skill_form(request, form, 'online_cv/includes/skills/partial_skill_create.html')
 
+@login_required
 def skill_edit(request, pk):
     skill = get_object_or_404(cvSkill, pk=pk)
     if request.method == 'POST':
@@ -185,6 +310,7 @@ def skill_edit(request, pk):
         form = cvSkillForm(instance=skill)
     return save_skill_form(request, form, 'online_cv/includes/skills/partial_skill_edit.html')
 
+@login_required
 def skill_delete(request, pk):
     skill = get_object_or_404(cvSkill, pk=pk)
     data = dict()
@@ -203,11 +329,28 @@ def skill_delete(request, pk):
         )
     return JsonResponse(data)
 
+@login_required
+def skill_next(request):
+    try:
+        extras = cvExtras.objects.get(user=request.user)   
+        if extras.interests == True:
+            return redirect('cv_interests')          
+        elif extras.languages == True:
+            return redirect('cv_languages')
+        elif extras.certifications == True:
+            return redirect('cv_certifications')
+        else:
+            return redirect('cv_preview')
+    except ObjectDoesNotExist:
+        return render(request, 'online_cv/extras_404.html')
+
 ################ Languages views ####################
+@login_required
 def languages(request):
     languages = cvLanguage.objects.filter(user=request.user)
     return render(request, 'online_cv/languages.html', {'languages': languages})
 
+@login_required
 def save_language_form(request, form, template_name):
     data = dict()
 
@@ -228,6 +371,7 @@ def save_language_form(request, form, template_name):
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 
+@login_required
 def language_create(request):
     if request.method == 'POST':
         form = cvLanguageForm(request.POST)
@@ -235,6 +379,7 @@ def language_create(request):
         form = cvLanguageForm()
     return save_language_form(request, form, 'online_cv/includes/languages/partial_language_create.html')
 
+@login_required
 def language_edit(request, pk):
     language = get_object_or_404(cvLanguage, pk=pk)
     if request.method == 'POST':
@@ -243,6 +388,7 @@ def language_edit(request, pk):
         form = cvLanguageForm(instance=language)
     return save_language_form(request, form, 'online_cv/includes/languages/partial_language_edit.html')
 
+@login_required
 def language_delete(request, pk):
     language = get_object_or_404(cvLanguage, pk=pk)
     data = dict()
@@ -261,11 +407,24 @@ def language_delete(request, pk):
         )
     return JsonResponse(data)
 
+@login_required
+def language_next(request):
+    try:
+        extras = cvExtras.objects.get(user=request.user)   
+        if extras.certifications == True:
+            return redirect('cv_certifications')
+        else:
+            return redirect('cv_preview')
+    except ObjectDoesNotExist:
+        return render(request, 'online_cv/extras_404.html')
+
 ################ Certifications views ####################
+@login_required
 def certifications(request):
     certifications = cvCertification.objects.filter(user=request.user)
     return render(request, 'online_cv/certifications.html', {'certifications': certifications})
 
+@login_required
 def save_certification_form(request, form, template_name):
     data = dict()
 
@@ -286,6 +445,7 @@ def save_certification_form(request, form, template_name):
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 
+@login_required
 def certification_create(request):
     if request.method == 'POST':
         form = cvCertificationForm(request.POST)
@@ -293,6 +453,7 @@ def certification_create(request):
         form = cvCertificationForm()
     return save_certification_form(request, form, 'online_cv/includes/certifications/partial_certification_create.html')
 
+@login_required
 def certification_edit(request, pk):
     certification = get_object_or_404(cvCertification, pk=pk)
     if request.method == 'POST':
@@ -301,6 +462,7 @@ def certification_edit(request, pk):
         form = cvCertificationForm(instance=certification)
     return save_certification_form(request, form, 'online_cv/includes/certifications/partial_certification_edit.html')
 
+@login_required
 def certification_delete(request, pk):
     certification = get_object_or_404(cvCertification, pk=pk)
     data = dict()
@@ -320,10 +482,12 @@ def certification_delete(request, pk):
     return JsonResponse(data)
 
 ################ Educations views ####################
+@login_required
 def educations(request):
     educations = cvEducation.objects.filter(user=request.user)
     return render(request, 'online_cv/education.html', {'educations': educations})
 
+@login_required
 def save_education_form(request, form, template_name):
     data = dict()
 
@@ -344,6 +508,7 @@ def save_education_form(request, form, template_name):
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 
+@login_required
 def education_create(request):
     if request.method == 'POST':
         form = cvEducationForm(request.POST)
@@ -351,6 +516,7 @@ def education_create(request):
         form = cvEducationForm()
     return save_education_form(request, form, 'online_cv/includes/educations/partial_education_create.html')
 
+@login_required
 def education_edit(request, pk):
     education = get_object_or_404(cvEducation, pk=pk)
     if request.method == 'POST':
@@ -359,6 +525,7 @@ def education_edit(request, pk):
         form = cvEducationForm(instance=education)
     return save_education_form(request, form, 'online_cv/includes/educations/partial_education_edit.html')
 
+@login_required
 def education_delete(request, pk):
     education = get_object_or_404(cvEducation, pk=pk)
     data = dict()
@@ -378,10 +545,12 @@ def education_delete(request, pk):
     return JsonResponse(data)
 
 ################ Work History views ####################
+@login_required
 def jobs(request):
     jobs = cvWorkHistory.objects.filter(user=request.user)
     return render(request, 'online_cv/job.html', {'jobs': jobs})
 
+@login_required
 def save_job_form(request, form, template_name):
     data = dict()
 
@@ -402,6 +571,7 @@ def save_job_form(request, form, template_name):
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 
+@login_required
 def job_create(request):
     if request.method == 'POST':
         form = cvWorkHistoryForm(request.POST)
@@ -409,6 +579,7 @@ def job_create(request):
         form = cvWorkHistoryForm()
     return save_job_form(request, form, 'online_cv/includes/jobs/partial_job_create.html')
 
+@login_required
 def job_edit(request, pk):
     job = get_object_or_404(cvWorkHistory, pk=pk)
     if request.method == 'POST':
@@ -417,6 +588,7 @@ def job_edit(request, pk):
         form = cvWorkHistoryForm(instance=job)
     return save_job_form(request, form, 'online_cv/includes/jobs/partial_job_edit.html')
 
+@login_required
 def job_delete(request, pk):
     job = get_object_or_404(cvWorkHistory, pk=pk)
     data = dict()

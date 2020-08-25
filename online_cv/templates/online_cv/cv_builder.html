@@ -1,15 +1,36 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+</br>
 <div class="content container">
   <div class="row">           
     <div class="col-md-8"> 
 			<h1>CV Builder</h1>
 			<div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-				<a class="btn btn-secondary" href="{% url 'cv_personal_details' %}" id="start_new_cv"><i class="fas fa-briefcase"></i> Start New CV</a>
-				<a class="btn btn-secondary" href="#" id="view_existing_cv"><i class="fas fa-file-alt"></i> View Existing CV</a>
+				<button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".bd-start-new-modal-lg" id="start_new_cv"><i class="fas fa-briefcase"></i> Start new CV</button>
+				<a class="btn btn-secondary" href="{% url 'cv_preview' %}" id="view_existing_cv"><i class="fas fa-file-alt"></i> View existing CV</a>
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade bd-start-new-modal-lg" id="startNewConfirm" tabindex="-1" role="dialog" aria-labelledby="startNewConfirmLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="alert alert-danger" role="alert">
+					<h4 class="alert-heading"><strong>Hold the phone!</strong></h4>
+					<p>Starting a new CV means any existing CV data will be <strong>deleted</strong>. You'll be starting from scratch! </p>
+					<hr>
+					<p class="mb-0"><small>Consider editing your details through the "View existing CV" button or exporting to pdf first.</small></p>
+				</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a href="{% url 'cv_start_new' %}" id="start_new_cv_confirm"><button type="button" class="btn btn-danger">Delete CV and start again</button></a>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

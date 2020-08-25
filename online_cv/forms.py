@@ -30,7 +30,7 @@ class cvPersonalDetailsForm(forms.ModelForm):
                 Column('email', css_class='form-group col-md-5 mb-0'),
                 css_class='form-row'
             ),
-            Submit('personal_details_next', 'Next')
+            Submit('personal_details_next', 'Next', css_class="btn btn-secondary")
         )
 
     class Meta:

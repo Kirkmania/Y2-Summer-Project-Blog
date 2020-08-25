@@ -15,6 +15,23 @@
 <script type="text/javascript"
   src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="/static/bootstrap_datepicker_plus/js/datepicker-widget.js"></script>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'cv_personal_details' %}">Personal Details</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_profile' %}">Profile</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_education' %}">Education</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_jobs' %}">Employment History</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_extras_edit' %}">Extras</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_skills' %}">Skills</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_interests' %}">Interests</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_languages' %}">Languages</a></li>
+    <li class="breadcrumb-item active"><span class="bg-secondary rounded text-light">&nbsp;Certifications&nbsp;</span></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_preview' %}">Preview</a></li>
+    <li class="breadcrumb-item active">Done!</li>
+  </ol>
+</nav>
+
 <div class="content container">
   <h1>CV Builder</h1>
   <h4>View your current certifications or add a new one</h4>
@@ -38,7 +55,7 @@
     data-url="{% url 'cv_certification_create' %}" id="id_add_certification">
       <i class="fas fa-plus"></i> Add a new Certification
     </button>
-    <a href="{% url 'cv_extras' %}" class="btn btn-secondary" style="float:inline-end;" id="id_next">Next</button></a>
+    <a href="{% url 'cv_preview' %}" class="btn btn-secondary" style="float:inline-end;" id="id_next">Next</button></a>
   </p>
 
   <div class="modal fade" id="modal-certification">

@@ -10,6 +10,7 @@
 
 
 {% block content %}
+</br>
 <div class="content container">
   <div class="row">           
     <div class="col-md-8">  
@@ -47,7 +48,7 @@
             {{ comment.created_date }}
           </small>
             {% if not comment.approved_comment %}
-            <div class="btn-group" role="group" aria-label="Basic example">
+            <div class="btn-group" role="group">
               <a class="btn btn-secondary" href="{% url 'comment_remove' pk=comment.pk %}" id="comment_remove"><i class="fas fa-trash"></i></a>
               <a class="btn btn-secondary" href="{% url 'comment_approve' pk=comment.pk %}" id="comment_approve"><i class="fas fa-check"></i></a>
             </div>

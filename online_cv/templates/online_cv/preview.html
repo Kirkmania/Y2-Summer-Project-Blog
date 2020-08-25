@@ -3,39 +3,50 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'cv_personal_details' %}">Personal Details</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_profile' %}">Profile</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_education' %}">Education</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_jobs' %}">Employment History</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_extras_edit' %}">Extras</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_skills' %}">Skills</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_interests' %}">Interests</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_languages' %}">Languages</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'cv_certifications' %}">Certifications</a></li>
+    <li class="breadcrumb-item active"><span class="bg-secondary rounded text-light">&nbsp;Preview&nbsp;</span></li>
+    <li class="breadcrumb-item active">Done!</li>
+  </ol>
+</nav>
+
 <div class="content container">
   <div class="col-md-10"> 
-    <h1 style="text-align:center;"><span style="color:black;">{{ personal_details.first_name }} {{ personal_details.last_name }}</span></h1>
+    <h1>CV Preview</h1>
+    <h4>Below is a sneak peek of what your CV will look like!</h4>
+    <p class= text-muted>Click on the "edit" button in the appropriate section to edit your information.</p>
+
+    {% if personal_details %}
+    <a href="{% url 'cv_personal_details' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_personal_details">Edit personal details</button></a><br><hr>
+    <div><h1 style="text-align:center;"><span style="color:black;">{{ personal_details.first_name }} {{ personal_details.last_name }}</span></h1></div>
     <p style="text-align:center;"><span style="color:#666666;">{{ personal_details.city}}, {{ personal_details.postcode }} | {{ personal_details.phone_number }} | {{ personal_details.email }}</span></p>
-    <h4><span style="color:#666666;">Profile</span></h4>
+    {% else %}
+    <a href="{% url 'cv_personal_details' %}" class="btn btn-secondary btn-sm float-right" id="id_add_personal_details">Add personal details</button></a><br><hr>
+    {% endif %}
+    
+    {% if profile %}
+    <h4><span style="color:#666666;">Profile</span>
+      <a href="{% url 'cv_profile' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_profile">Edit profile</button></a>
+    </h4>
     <hr>
     <p>{{ profile.text|safe }}</p>
-    <!-- <p style="margin-left:21.3pt;">&nbsp;</p> -->
-    <h4><span style="color:#666666;">Skills</span></h4><hr>
-    <ul>
-      {% for skill in skills %}
-      <li><strong>{{ skill.skill }}: </strong>{{ skill.description|striptags|safe }}</li>
-      {% endfor %}
-    </ul>
-    <h4><span style="color:#666666;">Interests</span></h4><hr>
-    <ul>
-      {% for interest in interests %}
-      <li><strong>{{ interest.interest }}: </strong>{{ interest.description|striptags|safe }}</li>
-      {% endfor %}
-    </ul>
-    <h4><span style="color:#666666;">Languages</span></h4><hr>
-    <ul>
-      {% for language in languages %}
-      <li><strong>{{ language.language }}: </strong>{{ language.proficiency }}</li>
-      {% endfor %}
-    </ul>
-    <h4><span style="color:#666666;">Certifications</span></h4><hr>
-    <ul>
-      {% for certification in certifications %}
-      <li><strong>{{ certification.certification }} </strong><span class="text-muted">{{ certification.date }}</span></li>
-      {% endfor %}
-    </ul>
-    <h4><span style="color:#666666;">Education</span></h4><hr>
+    {% else %}
+    <a href="{% url 'cv_profile' %}" class="btn btn-secondary btn-sm float-right" id="id_add_profile">Add profile</button></a><br><hr>
+    {% endif %}
+
+    {% if educations %}
+    <h4><span style="color:#666666;">Education</span>
+      <a href="{% url 'cv_education' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_education">Edit education</button></a>
+    </h4><hr>
     <ul>
       {% for education in educations %}
       <li>
@@ -43,11 +54,81 @@
       </li>
       {% endfor %}
     </ul>
-    <h4><span style="color:#666666;">Employment History</span></h4><hr>
+    {% else %}
+    <a href="{% url 'cv_education' %}" class="btn btn-secondary btn-sm float-right" id="id_add_education">Add education</button></a><br><hr>
+    {% endif %}
+
+    {% if jobs %}
+    <h4><span style="color:#666666;">Employment History</span>
+      <a href="{% url 'cv_jobs' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_jobs">Edit employment history</button></a>
+    </h4><hr>
     {% for job in jobs %}
-    <h5><strong>{{ job.job_title }}</strong>, {{ job.employer }}, {{ job.city }} <span class="text-muted"> {{ job.start_date }} - {% if job.end_date %}{{ job.end_date }}{% else %}present{% endif %}</span></h5>
+    <h5><strong>{{ job.job_title }}</strong>, {{ job.employer }}, {{ job.city }} <small><span class="text-muted"> {{ job.start_date }} - {% if job.end_date %}{{ job.end_date }}{% else %}present{% endif %}</span></small></h5>
     {{ job.description|safe }}
     {% endfor %}
+    {% else %}
+    <a href="{% url 'cv_jobs' %}" class="btn btn-secondary btn-sm float-right" id="id_add_jobs">Add employment history</button></a><br><hr>
+    {% endif %}
+
+    {% if not extras %}
+    <a href="{% url 'cv_extras' %}" class="btn btn-secondary btn-sm float-right" id="id_add_extras">Add extras</button></a><br><hr>
+    {% endif %}
+
+    {% if extras.skills %}
+    <h4><span style="color:#666666;">Skills</span>
+      <div class="btn-group float-right" role="group">
+        <a href="{% url 'cv_skills' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_skills">Edit skills</button></a>
+        <a href="{% url 'cv_extras_edit' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_extras">Change extras</button></a>
+      </div>
+    </h4><hr>
+    <ul>
+      {% for skill in skills %}
+      <li><strong>{{ skill.skill }}: </strong>{{ skill.description|striptags|safe }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if extras.interests %}
+    <h4><span style="color:#666666;">Interests</span>
+      <div class="btn-group float-right" role="group">
+        <a href="{% url 'cv_interests' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_interests">Edit interests</button></a>
+        <a href="{% url 'cv_extras_edit' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_extras">Change extras</button></a>
+      </div>
+    </h4><hr>
+    <ul>
+      {% for interest in interests %}
+      <li><strong>{{ interest.interest }}: </strong>{{ interest.description|striptags|safe }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if extras.languages %}
+    <h4><span style="color:#666666;">Languages</span>
+      <div class="btn-group float-right" role="group">
+        <a href="{% url 'cv_languages' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_languages">Edit languages</button></a>
+        <a href="{% url 'cv_extras_edit' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_extras">Change extras</button></a>
+      </div>
+    </h4><hr>
+    <ul>
+      {% for language in languages %}
+      <li><strong>{{ language.language }}: </strong>{{ language.proficiency }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if extras.certifications %}
+    <h4><span style="color:#666666;">Certifications</span>
+      <div class="btn-group float-right" role="group">
+        <a href="{% url 'cv_certifications' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_certifications">Edit certifications</button></a>
+        <a href="{% url 'cv_extras_edit' %}" class="btn btn-secondary btn-sm float-right" id="id_edit_extras">Change extras</button></a>
+      </div>
+    </h4><hr>
+    <ul>
+      {% for certification in certifications %}
+      <li><strong>{{ certification.certification }} </strong><span class="text-muted">{{ certification.date }}</span></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+  George's Blog: Error 404 - Extras not found
+{% endblock %}
+
+{% block content %}
+</br>
+<div class="content container">
+  <div class="row">           
+    <div class="col-md-8">  
+      <h3>Something went wrong :(</h3>
+      <p>Sorry about that! Our office monkeys seemed to have misplaced your extras choices while they were flinging poo at each other.</p>
+      <p>You'll be redirected back to extras selection in a few moments, or you can <a href="{% url 'cv_extras' %}">click here to go right now.</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+  function redirect(){
+     window.location.href = "/cv/extras";
+  }
+
+  setTimeout(redirect, 8000);
+</script>
+{% endblock %}
