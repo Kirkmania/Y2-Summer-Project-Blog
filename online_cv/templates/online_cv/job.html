@@ -1,0 +1,58 @@
+{% extends 'blog/base.html' %}
+
+{% load static %}
+
+{% block javascript %}
+  <script src="{% static 'online_cv/js/jobs.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"
+  type="text/css" media="all" rel="stylesheet">
+<link href="/static/bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap_datepicker_plus/js/datepicker-widget.js"></script>
+
+<div class="content">
+  <h1>CV Builder</h1>
+  <h4>View your current employment entries or add a new one</h4>
+  <div class="row justify-content-left">
+    <div class="col-8">
+  <table class="table table-hover" style="width:130%" id="job-table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Job Title</th>
+        <th scope="col">Employer</th>
+        <th scope="col">City</th>
+        <th scope="col">Description</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col"></th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% include 'online_cv/includes/jobs/partial_jobs_list.html' %}
+    </tbody>
+  </table>
+
+
+  <p>
+    <button type="button" class="btn btn-secondary js-create-job"
+    data-url="{% url 'cv_job_create' %}" id="id_add_job">
+      <i class="fas fa-plus"></i> Add a new entry
+    </button>
+    <a href="{% url 'cv_extras' %}" class="btn btn-secondary" id="id_next">Next</button></a>
+  </p>
+</div>
+</div>
+  <div class="modal fade" id="modal-job">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% for interest in interests %}
+<tr>
+  <td style="width: 15%">{{ interest.interest }}</td>
+  <td>{{ interest.description|striptags|safe }}</td>
+  <td style="width: 12%">
+    <button type="button" class="btn btn-secondary btn-sm js-edit-interest"
+      data-url="{% url 'cv_interest_edit' interest.id %}" id="id_interest_edit">Edit</button>
+    <button type="button" class="btn btn-danger btn-sm js-delete-interest"
+      data-url="{% url 'cv_interest_delete' interest.id %}" id="id_interest_delete">Delete</button>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="7"></td>
+</tr>
+{% endfor %}

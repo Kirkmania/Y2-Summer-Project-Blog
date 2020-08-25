@@ -1,0 +1,20 @@
+{% for job in jobs %}
+<tr>
+  <td style="width: 10%">{{ job.job_title }}</td>
+  <td style="width: 10%">{{ job.employer }}</td>
+  <td style="width: 5%">{{ job.city }}</td>
+  <td style="width: 50%">{{ job.description|safe }}</td>
+  <td style="width: 8%">{{ job.start_date }}</td>
+  <td style="width: 8%">{{ job.end_date }}</td>
+  <td style="width: 10%">
+    <button type="button" class="btn btn-secondary btn-sm js-edit-job"
+      data-url="{% url 'cv_job_edit' job.id %}" id="id_job_edit">Edit</button>
+    <button type="button" class="btn btn-danger btn-sm js-delete-job"
+      data-url="{% url 'cv_job_delete' job.id %}" id="id_job_delete">Delete</button>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="7"></td>
+</tr>
+{% endfor %}

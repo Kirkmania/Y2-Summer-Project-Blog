@@ -1,0 +1,16 @@
+{% for skill in skills %}
+<tr>
+  <td style="width: 15%">{{ skill.skill }}</td>
+  <td>{{ skill.description|striptags|safe }}</td>
+  <td style="width: 12%">
+    <button type="button" class="btn btn-secondary btn-sm js-edit-skill"
+      data-url="{% url 'cv_skill_edit' skill.id %}" id="id_skill_edit">Edit</button>
+    <button type="button" class="btn btn-danger btn-sm js-delete-skill"
+      data-url="{% url 'cv_skill_delete' skill.id %}" id="id_skill_delete">Delete</button>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="7"></td>
+</tr>
+{% endfor %}

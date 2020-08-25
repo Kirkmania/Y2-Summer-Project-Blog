@@ -1,0 +1,21 @@
+{% for education in educations %}
+<tr>
+  <td style="width: 13%">{{ education.subject }}</td>
+  <td style="width: 2%">{{ education.grade }}</td>
+  <td style="width: 15%">{{ education.school }}</td>
+  <td style="width: 7%">{{ education.location }}</td>
+  <td style="width: 10%">{{ education.level_of_study }}</td>
+  <td style="width: 9%">{{ education.start_date }}</td>
+  <td style="width: 9%">{{ education.end_date }}</td>
+  <td style="width: 10%">
+    <button type="button" class="btn btn-secondary btn-sm js-edit-education"
+      data-url="{% url 'cv_education_edit' education.id %}" id="id_education_edit">Edit</button>
+    <button type="button" class="btn btn-danger btn-sm js-delete-education"
+      data-url="{% url 'cv_education_delete' education.id %}" id="id_education_delete">Delete</button>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="7"></td>
+</tr>
+{% endfor %}

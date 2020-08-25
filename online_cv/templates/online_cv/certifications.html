@@ -1,11 +1,50 @@
 {% extends 'blog/base.html' %}
 
-{% load crispy_forms_tags %}
+{% load static %}
+
+{% block javascript %}
+  <script src="{% static 'online_cv/js/certifications.js' %}"></script>
+{% endblock %}
 
 {% block content %}
-</div></div>
-      <h1>CV Builder</h1>
-      <h4>Certifications</h4>
-      {{ form.media }}
-      {% crispy form %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"
+  type="text/css" media="all" rel="stylesheet">
+<link href="/static/bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap_datepicker_plus/js/datepicker-widget.js"></script>
+<div class="content container">
+  <h1>CV Builder</h1>
+  <h4>View your current certifications or add a new one</h4>
+  <div class="row justify-content-left">
+    <div class="col-9">
+  <table class="table table-hover" style="width:100%" id="certification-table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Certification</th>
+        <th scope="col">Date</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% include 'online_cv/includes/certifications/partial_certifications_list.html' %}
+    </tbody>
+  </table>
+
+  <p>
+    <button type="button" class="btn btn-secondary js-create-certification"
+    data-url="{% url 'cv_certification_create' %}" id="id_add_certification">
+      <i class="fas fa-plus"></i> Add a new Certification
+    </button>
+    <a href="{% url 'cv_extras' %}" class="btn btn-secondary" style="float:inline-end;" id="id_next">Next</button></a>
+  </p>
+
+  <div class="modal fade" id="modal-certification">
+    <div class="modal-dialog">
+      <div class="modal-content">
+    </div>
+  </div>
+</div>
 {% endblock %}

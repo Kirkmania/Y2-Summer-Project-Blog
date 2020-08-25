@@ -1,0 +1,13 @@
+<form method="post" action="{% url 'cv_language_delete' language.pk %}" class="js-language-delete-form">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h4 class="modal-title">Confirm language deletion</h4>
+  </div>
+  <div class="modal-body">
+    <p class="lead">Are you sure you want to delete the language <strong>{{ language.language }}</strong>?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="id_close">Close</button>
+    <button type="submit" class="btn btn-danger" id="id_confirm_language_delete">Delete language</button>
+  </div>
+</form>

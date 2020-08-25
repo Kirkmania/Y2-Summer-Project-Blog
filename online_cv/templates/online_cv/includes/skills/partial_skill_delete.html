@@ -1,0 +1,13 @@
+<form method="post" action="{% url 'cv_skill_delete' skill.pk %}" class="js-skill-delete-form">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h4 class="modal-title">Confirm skill deletion</h4>
+  </div>
+  <div class="modal-body">
+    <p class="lead">Are you sure you want to delete the skill <strong>{{ skill.skill }}</strong>?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="id_close">Close</button>
+    <button type="submit" class="btn btn-danger" id="id_confirm_skill_delete">Delete skill</button>
+  </div>
+</form>

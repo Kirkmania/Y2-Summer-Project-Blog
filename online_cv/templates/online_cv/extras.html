@@ -3,8 +3,10 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-      <h1>CV Builder</h1>
-      <h4>Additional details</h4>
-      {{ form.media }}
-      {% crispy form %}
+<div class="content container">
+  <h1>CV Builder</h1>
+  <h4>Additional details</h4>
+  {{ form.media }}
+  {% crispy form %}
+</div>
 {% endblock %}

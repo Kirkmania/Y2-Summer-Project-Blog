@@ -10,6 +10,9 @@
 
 
 {% block content %}
+<div class="content container">
+  <div class="row">           
+    <div class="col-md-8">  
   {% if post.published_date or perms.blog.manage_posts or user.id == post.author.id %}
     <div class="post">
       <h2>{{ post.title }}    
@@ -62,6 +65,9 @@
     <h2>404 :(</h2>
     <p>This post cannot be found.</p>
   {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 

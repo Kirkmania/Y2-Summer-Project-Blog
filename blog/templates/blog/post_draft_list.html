@@ -5,20 +5,26 @@
 {% endblock %}
 
 {% block content %}
+<div class="content container">
+	<div class="row">           
+		<div class="col-md-8">  
 	{% for post in posts %}
 		{% if post.author == user or perms.blog.manage_posts %}
     <div class="post">
-				<h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
-					<a class="btn btn-secondary btn-sm" href ="{% url 'post_publish' pk=post.pk %}" id="post_publish"><i class="fa fa-paper-plane"></i> Publish</a></a>
-				</h2>
-				<div class="date">
-					<small><a href="{% url 'category' post.category|slugify %}">{{ post.category }}</a> | 
-						{{ post.author.first_name }} {{ post.author.last_name }} | Published: {{ post.published_date }}</small>
-				</div> 
-					<p>{{ post.text|slice:":200"|safe }}...</p>
-					<a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}
-					<hr>
-				</div>
+			<h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+				<a class="btn btn-secondary btn-sm" href ="{% url 'post_publish' pk=post.pk %}" id="post_publish"><i class="fa fa-paper-plane"></i> Publish</a></a>
+			</h2>
+			<div class="date">
+				<small><a href="{% url 'category' post.category|slugify %}">{{ post.category }}</a> | 
+					{{ post.author.first_name }} {{ post.author.last_name }} | Published: {{ post.published_date }}</small>
+			</div> 
+				<p>{{ post.text|slice:":200"|safe }}...</p>
+				<a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}
+				<hr>
+			</div>
 	{% endif %}
 	{% endfor %}
+		</div>
+	</div>
+</div>
 {% endblock %}

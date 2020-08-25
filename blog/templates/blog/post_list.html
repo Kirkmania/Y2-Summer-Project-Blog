@@ -1,6 +1,9 @@
 {% extends 'blog/base.html' %}
 
-{% block content %}         <!-- this injects the html block into the content block in base.html. -->
+{% block content %}    <!-- this injects the html block into the content block in base.html. -->
+<div class="content container">
+  <div class="row">           
+    <div class="col-md-8">       
   {% for post in posts %}
     <div class="post">
     <!-- pk means primary key, default auto generated and accessed by post.pk-->
@@ -15,4 +18,7 @@
         <hr>
       </div>
     {% endfor %}
+    </div>
+  </div>
+</div>
 {% endblock %}

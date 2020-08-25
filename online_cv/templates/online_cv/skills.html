@@ -1,10 +1,40 @@
 {% extends 'blog/base.html' %}
 
-{% load crispy_forms_tags %}
+{% load static %}
+
+{% block javascript %}
+  <script src="{% static 'online_cv/js/skills.js' %}"></script>
+{% endblock %}
 
 {% block content %}
-      <h1>CV Builder</h1>
-      <h4>Skills</h4>
-      {{ form.media }}
-      {% crispy form %}
+<div class="content container">
+  <h1>CV Builder</h1>
+  <h4>View your current skills or add a new one</h4>
+  <table class="table" id="skill-table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Skill</th>
+        <th scope="col">Description</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% include 'online_cv/includes/skills/partial_skills_list.html' %}
+    </tbody>
+  </table>
+
+  <p>
+    <button type="button" class="btn btn-secondary js-create-skill"
+    data-url="{% url 'cv_skill_create' %}" id="id_add_skill">
+      <i class="fas fa-plus"></i> Add a new Skill
+    </button>
+    <a href="{% url 'cv_extras' %}" class="btn btn-secondary" style="float:right;" id="id_next">Next</button></a>
+  </p>
+
+  <div class="modal fade" id="modal-skill">
+    <div class="modal-dialog">
+      <div class="modal-content">
+    </div>
+  </div>
+</div>
 {% endblock %}

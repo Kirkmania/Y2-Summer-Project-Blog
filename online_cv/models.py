@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django_ckeditor_5.fields import CKEditor5Field
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 class CV(models.Model):
@@ -50,7 +51,7 @@ class cvWorkHistory(models.Model):
     job_title = models.CharField(max_length=100)
     employer = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
-    description = CKEditor5Field('Description', config_name='default', blank=True)
+    description = RichTextField(blank=True, config_name='job')
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
 
@@ -70,7 +71,7 @@ class cvExtras(models.Model):
 class cvSkill(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     skill = models.CharField(max_length=100)
-    description = CKEditor5Field('Description', config_name='default', blank=True)
+    description = RichTextField(blank=True)
 
     def __str__(self):
         return '%s: %s' % (self.user.get_full_name(), self.skill)
@@ -78,7 +79,7 @@ class cvSkill(models.Model):
 class cvInterest(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     interest = models.CharField(max_length=100)
-    description = CKEditor5Field('Description', config_name='default', blank=True)
+    description = RichTextField(blank=True)
 
     def __str__(self):
         return '%s: %s' % (self.user.get_full_name(), self.interest)

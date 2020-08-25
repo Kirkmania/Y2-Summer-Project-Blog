@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'online_cv',
     'django_ckeditor_5',
+    'ckeditor',
     'crispy_forms',
     'bootstrap_datepicker_plus',
 ]
@@ -136,6 +137,27 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Configuration for crispy-forms app
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+        ],
+        'height': 170,
+        'width': 465
+    },
+    'job': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+        ],
+        'height': 170,
+        'width': 750
+    },
+}
 
 customColorPalette = [
         {

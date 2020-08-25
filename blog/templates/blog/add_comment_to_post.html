@@ -5,27 +5,33 @@
 {% endblock %}
 
 {% block content %}
-  <h1>New comment</h1>
-	<form method="POST" class="post-form">{% csrf_token %}
+<div class="content container">
+  <div class="row">           
+    <div class="col-md-8">  
+      <h1>New comment</h1>
+      <form method="POST" class="post-form">{% csrf_token %}
 
-    <div class="form-group">
-      <label for="id_author">Username:</label>
-      {% if user.username %}
-        <input type="text" name="author" class="form-control" value="{{ user.username }}" required="" id="id_author" readonly>
-        <small id="username_tooltip" class="form-text text-muted">Change your username here.</small>
-        
-      {% else %}
-      <input type="text" name="author" class="form-control" maxlength="200" required="" id="id_author">
-      <small id="login_new_user" class="form-text text-muted">You are not currently signed in.<br>
-        You can still submit a comment, but it won't be shown until it's been approved.<br>
-        <a href="{% url 'login' %}"">Login</a> or <a href="{% url 'register' %}"">sign up</a> to post your comment immediately!</small>
-      {% endif %}
-    </div>
+        <div class="form-group">
+          <label for="id_author">Username:</label>
+          {% if user.username %}
+            <input type="text" name="author" class="form-control" value="{{ user.username }}" required="" id="id_author" readonly>
+            <small id="username_tooltip" class="form-text text-muted">Change your username here.</small>
+            
+          {% else %}
+          <input type="text" name="author" class="form-control" maxlength="200" required="" id="id_author">
+          <small id="login_new_user" class="form-text text-muted">You are not currently signed in.<br>
+            You can still submit a comment, but it won't be shown until it's been approved.<br>
+            <a href="{% url 'login' %}"">Login</a> or <a href="{% url 'register' %}"">sign up</a> to post your comment immediately!</small>
+          {% endif %}
+        </div>
 
-    <div class="form-group">
-      <label for="id_text">Text:</label>
-      <textarea name="text" cols="40" rows="10" class="form-control" required="" id="id_text"></textarea>
+        <div class="form-group">
+          <label for="id_text">Text:</label>
+          <textarea name="text" cols="40" rows="10" class="form-control" required="" id="id_text"></textarea>
+        </div>
+        <button type="submit" class="btn btn-secondary" id="comment_submit">Submit</button>
+      </form>
     </div>
-    <button type="submit" class="btn btn-secondary" id="comment_submit">Submit</button>
-  </form>
+  </div>
+</div>
 {% endblock %}

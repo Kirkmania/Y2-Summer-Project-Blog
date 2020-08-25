@@ -1,0 +1,17 @@
+{% load crispy_forms_tags %}
+{% load static %}
+{{ form.media }}
+
+<form method="post" action="{% url 'cv_job_create' %}" class="js-job-create-form">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h4 class="modal-title">Add a new job</h4>
+  </div>
+  <div class="modal-body">
+    {% include 'online_cv/includes/jobs/partial_job_form.html' %}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="id_close">Close</button>
+    <button type="submit" class="btn btn-secondary" id="id_confirm_job">Add job</button>
+  </div>
+</form>

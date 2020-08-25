@@ -1,11 +1,59 @@
 {% extends 'blog/base.html' %}
 
-{% load crispy_forms_tags %}
+{% load static %}
+
+{% block javascript %}
+  <script src="{% static 'online_cv/js/educations.js' %}"></script>
+{% endblock %}
 
 {% block content %}
-</div></div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"
+  type="text/css" media="all" rel="stylesheet">
+<link href="/static/bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap_datepicker_plus/js/datepicker-widget.js"></script>
+
+<div class="content">
   <h1>CV Builder</h1>
-  <h4>Education</h4>
-  <p><small class='form-text text-muted'>If you are still currently studying the subject you have entered, you can leave 'End date' and 'Grade' blank.</small></p>
-  {% crispy form %}
+  <h4>View your current education details or add a new one</h4>
+  <div class="row justify-content-left">
+    <div class="col-auto">
+  <table class="table table-hover" style="width:130%" id="education-table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Education</th>
+        <th scope="col">Grade</th>
+        <th scope="col">School</th>
+        <th scope="col">Location</th>
+        <th scope="col">Level of Study</th>
+        <th scope="col">Start date</th>
+        <th scope="col">End date</th>
+        <th scope="col"></th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% include 'online_cv/includes/educations/partial_educations_list.html' %}
+    </tbody>
+  </table>
+
+
+  <p>
+    <button type="button" class="btn btn-secondary js-create-education"
+    data-url="{% url 'cv_education_create' %}" id="id_add_education">
+      <i class="fas fa-plus"></i> Add a new entry
+    </button>
+    <a href="{% url 'cv_jobs' %}" class="btn btn-secondary" id="id_next">Next</button></a>
+  </p>
+</div>
+</div>
+  <div class="modal fade" id="modal-education">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+    </div>
+  </div>
+</div>
 {% endblock %}
