@@ -40,4 +40,5 @@ urlpatterns = [
     path('jobs/create', views.job_create, name='cv_job_create'),
     path('jobs/<int:pk>/edit', views.job_edit, name='cv_job_edit'),
     path('jobs/<int:pk>/delete', views.job_delete, name='cv_job_delete'),
+    path('export', views.ExportPDF.as_view(), name='cv_export_pdf'),
 ]

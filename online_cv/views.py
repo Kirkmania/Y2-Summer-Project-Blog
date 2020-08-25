@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from easy_pdf.rendering import render_to_pdf_response
+from django_weasyprint import WeasyTemplateView
 from .forms import *
 from blog.models import Post
 from .models import *
@@ -154,41 +157,6 @@ def extras_edit(request):
         form = cvExtrasForm(instance=extras)
         # except MultipleObjectsReturned:
     return render(request, 'online_cv/extras.html', {'form': form,})
-
-@login_required
-def preview(request):
-    educations = cvEducation.objects.filter(user=request.user).order_by('-start_date')
-    jobs = cvWorkHistory.objects.filter(user=request.user).order_by('-start_date')
-    skills = cvSkill.objects.filter(user=request.user)
-    interests = cvInterest.objects.filter(user=request.user)
-    certifications = cvCertification.objects.filter(user=request.user).order_by('-date')
-    languages = cvLanguage.objects.filter(user=request.user)
-
-    try:
-        personal_details = cvPersonalDetails.objects.get(user=request.user)
-    except ObjectDoesNotExist:
-        personal_details = False
-    try:
-        profile = cvProfile.objects.get(user=request.user)
-    except ObjectDoesNotExist:
-        profile = False
-
-    try:
-        extras = cvExtras.objects.get(user=request.user)
-    except ObjectDoesNotExist:
-        extras = False
-
-    return render(request, 'online_cv/preview.html', {
-        'personal_details': personal_details,
-        'profile': profile,
-        'educations': educations,
-        'jobs': jobs,
-        'extras': extras,
-        'skills': skills,
-        'interests': interests,
-        'certifications': certifications,
-        'languages': languages,
-    })
 
 ################ Interests views ####################
 @login_required
@@ -606,3 +574,91 @@ def job_delete(request, pk):
             request=request,
         )
     return JsonResponse(data)
+
+####################### PREVIEW AND PDFVIEW AT LAST ############################
+@login_required
+def preview(request):
+    educations = cvEducation.objects.filter(user=request.user).order_by('-start_date')
+    jobs = cvWorkHistory.objects.filter(user=request.user).order_by('-start_date')
+    skills = cvSkill.objects.filter(user=request.user)
+    interests = cvInterest.objects.filter(user=request.user)
+    certifications = cvCertification.objects.filter(user=request.user).order_by('-date')
+    languages = cvLanguage.objects.filter(user=request.user)
+
+    try:
+        personal_details = cvPersonalDetails.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        personal_details = False
+    try:
+        profile = cvProfile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        profile = False
+
+    try:
+        extras = cvExtras.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        extras = False
+
+    context = {
+        'personal_details': personal_details,
+        'profile': profile,
+        'educations': educations,
+        'jobs': jobs,
+        'extras': extras,
+        'skills': skills,
+        'interests': interests,
+        'certifications': certifications,
+        'languages': languages,
+    }
+
+    return render(request, 'online_cv/preview.html', {
+        'personal_details': personal_details,
+        'profile': profile,
+        'educations': educations,
+        'jobs': jobs,
+        'extras': extras,
+        'skills': skills,
+        'interests': interests,
+        'certifications': certifications,
+        'languages': languages,
+    })
+
+class ExportPDF(WeasyTemplateView):
+    
+    template_name='online_cv/export.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ExportPDF, self).get_context_data(**kwargs)
+
+        self.educations = cvEducation.objects.filter(user=self.request.user).order_by('-start_date')
+        self.jobs = cvWorkHistory.objects.filter(user=self.request.user).order_by('-start_date')
+        self.skills = cvSkill.objects.filter(user=self.request.user)
+        self.interests = cvInterest.objects.filter(user=self.request.user)
+        self.certifications = cvCertification.objects.filter(user=self.request.user).order_by('-date')
+        self.languages = cvLanguage.objects.filter(user=self.request.user)
+
+        try:
+            self.personal_details = cvPersonalDetails.objects.get(user=self.request.user)
+        except ObjectDoesNotExist:
+            self.personal_details = False
+        try:
+            self.profile = cvProfile.objects.get(user=self.request.user)
+        except ObjectDoesNotExist:
+            self.profile = False
+
+        try:
+            self.extras = cvExtras.objects.get(user=self.request.user)
+        except ObjectDoesNotExist:
+            self.extras = False
+
+        context['educations'] = self.educations
+        context['jobs'] = self.jobs
+        context['skills'] = self.skills
+        context['interests'] = self.interests
+        context['certifications'] = self.certifications
+        context['languages'] = self.languages
+        context['personal_details'] = self.personal_details
+        context['profile'] = self.profile
+        context['extras'] = self.extras
+
+        return context
