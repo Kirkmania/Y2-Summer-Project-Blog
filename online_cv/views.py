@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from easy_pdf.rendering import render_to_pdf_response
 from django_weasyprint import WeasyTemplateView
 from .forms import *
 from blog.models import Post
