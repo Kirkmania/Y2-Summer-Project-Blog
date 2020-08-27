@@ -140,11 +140,11 @@ class CVUnitTests(TestCase):
         self.assertRedirects(response, '/cv/skills')
 
         # When skills object(s) exist, should redirect to interests
-        response = c.post('/cv/skills', {'skill': 'Programming', 'description': 'I can code'})
+        response = c.post('/cv/skills/next', {'skill': 'Programming', 'description': 'I can code'})
         self.assertRedirects(response, '/cv/interests')
 
         # When interest object(s) exist, should redirect to certs
-        response = c.post('/cv/interests', {'interest': 'Programming', 'description': 'I like code'})
+        response = c.post('/cv/interests/next', {'interest': 'Programming', 'description': 'I like code'})
         self.assertRedirects(response, '/cv/certifications')
 
     def test_skills_are_correctly_saved(self):
@@ -220,7 +220,7 @@ class CVUnitTests(TestCase):
 
         form = cvLanguageForm({
             "language": "French", 
-            "proficiency": "3", 
+            "proficiency": "Elementary", 
             })
         
         self.assertTrue(form.is_valid())
@@ -229,4 +229,4 @@ class CVUnitTests(TestCase):
         cv_language.save()
 
         self.assertEqual(cv_language.language, "French")
-        self.assertEqual(cv_language.proficiency, "3")
+        self.assertEqual(cv_language.proficiency, "Elementary")

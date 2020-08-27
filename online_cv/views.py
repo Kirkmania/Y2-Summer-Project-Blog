@@ -610,17 +610,7 @@ def preview(request):
         'languages': languages,
     }
 
-    return render(request, 'online_cv/preview.html', {
-        'personal_details': personal_details,
-        'profile': profile,
-        'educations': educations,
-        'jobs': jobs,
-        'extras': extras,
-        'skills': skills,
-        'interests': interests,
-        'certifications': certifications,
-        'languages': languages,
-    })
+    return render(request, 'online_cv/preview.html', context)
 
 class ExportPDF(WeasyTemplateView):
     

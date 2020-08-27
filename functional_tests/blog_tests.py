@@ -1,10 +1,11 @@
 from django.test import Client #, LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group, User, AnonymousUser
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver import ActionChains
-from blog.models import Post, Comment
+from blog.models import Post, Comment, Category
 from django.utils import timezone
 import time
 #import unittest
@@ -49,7 +50,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
             approved_comment=True)
 
         comment = Comment.objects.create(post=post,
-            author="Kassandra",
+            author=AnonymousUser(),
             text="I've HAD it with those damn Kosmos Cultists!!",
             created_date="0001-05-23 18:38",
             approved_comment=False)
@@ -114,44 +115,40 @@ class NewVisitorTest(StaticLiveServerTestCase):
         login_password.send_keys('starbucks')
         login_submit_button.click()
 
-        # Upon returning to the home page, he clicks the new "new post" button and writes a blog post
+        # First he wants to add a new category that his post will be in.
+        self.browser.find_element_by_id('id_add_category').click()
+        self.browser.find_element_by_id('id_name').send_keys('Testing')
+        self.browser.find_element_by_id('save_post').click()
+
+        # Now, he clicks the new "new post" button and writes a blog post
         self.browser.find_element_by_id('post_new_button').click()
 
         newpost_title = self.browser.find_element_by_id('id_title')
-        newpost_title.send_keys('Lorem Ipsum')  # Hey cool, this \ thing lets you overflow strings in python!
-        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
-        newpost_richtext = self.browser.find_element_by_class_name("cke_editable")
-        #newpost_text = self.browser.find_element_by_id('id_text')
-        #post_save_button = self.browser.find_element_by_id('save_post')
-
-
-        newpost_richtext.send_keys('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac ex ante. \
-            Nullam iaculis fermentum tortor, non suscipit elit aliquet quis. Donec consequat placerat accumsan. \
-            Praesent et ante non mi finibus pellentesque sed eget metus. In posuere, massa vel aliquet elementum, \
-            metus nisi interdum tellus, in accumsan sapien ex vitae neque. Aliquam viverra in magna vitae fringilla. \
-            Curabitur a scelerisque neque. Ut tortor nisi, posuere sit amet neque a, viverra congue ligula. \
-            Maecenas in porta ligula. Nam lobortis commodo diam, id ultrices libero ullamcorper aliquam. \
-            Quisque consectetur leo ante, id tincidunt erat semper sit amet. In pellentesque feugiat iaculis. \
-            Ut sit amet ante facilisis, auctor neque a, tincidunt libero. Pellentesque ut varius lorem, in luctus sapien. \
-            Praesent ullamcorper ante eget magna maximus accumsan. ')
-        self.browser.switch_to_default_content()
-        post_save_button = self.browser.find_element_by_id('save_post')
-        post_save_button.click()
+        newpost_title.send_keys('Lorem Ipsum')
+        newpost_richtext = self.browser.find_element_by_xpath('//*[@id="div_id_text"]/div/div/div[2]/div')
+        newpost_richtext.send_keys('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac ex ante.' +
+            'Nullam iaculis fermentum tortor, non suscipit elit aliquet quis. Donec consequat placerat accumsan.' +
+            'Praesent et ante non mi finibus pellentesque sed eget metus. In posuere, massa vel aliquet elementum,' +
+            'metus nisi interdum tellus, in accumsan sapien ex vitae neque. Aliquam viverra in magna vitae fringilla.' +
+            'Curabitur a scelerisque neque. Ut tortor nisi, posuere sit amet neque a, viverra congue ligula.' +
+            'Maecenas in porta ligula. Nam lobortis commodo diam, id ultrices libero ullamcorper aliquam.' +
+            'Quisque consectetur leo ante, id tincidunt erat semper sit amet. In pellentesque feugiat iaculis.' +
+            'Ut sit amet ante facilisis, auctor neque a, tincidunt libero. Pellentesque ut varius lorem, in luctus sapien.' +
+            'Praesent ullamcorper ante eget magna maximus accumsan. ')
+        Select(self.browser.find_element_by_id("id_category")).select_by_value('Testing')
+        self.browser.find_element_by_id('submit-id-save_as_draft').click()
 
         # He wants to check his other drafts first before he publishes, so clicks back to homepage, then "drafts" button
         self.browser.find_element_by_link_text("George's Blog").click()
         self.browser.find_element_by_id('view_drafts_button').click()
         self.browser.find_element_by_link_text('Lorem Ipsum').click()
-
         # He notices a missing line to add before publishing
         self.browser.find_element_by_id('post_edit').click()
 
-        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
-        newpost_richtext = self.browser.find_element_by_class_name("cke_editable")
+        newpost_richtext = self.browser.find_element_by_xpath('//*[@id="div_id_text"]/div/div/div[2]/div')
         
         newpost_richtext.send_keys(' This is my missing line!')
-        self.browser.switch_to_default_content()
-        post_save_button = self.browser.find_element_by_id('save_post')
+        post_save_button = self.browser.find_element_by_id('submit-id-save_as_draft')
         post_save_button.click()
 
         # Missing line has been added
@@ -189,19 +186,18 @@ class NewVisitorTest(StaticLiveServerTestCase):
         comments = self.browser.find_elements_by_class_name("comment")
         self.assertIn("Does this work??", comments[0].text)
 
-        # He sees an new (very old) comment from Kassandra the assassin, which he approves
-        self.assertIn("Kassandra", comments[1].text)
+        # He sees an new (very old) comment from Kassandra the assassin (appearing anonymously this time...), which he approves
+        self.assertIn("AnonymousUser", comments[1].text)
         self.browser.find_element_by_id("comment_approve").click()
 
         # Finally, let's try adding a new comment
         self.browser.find_element_by_id("comment_add").click()
-        self.browser.find_element_by_id("id_author").send_keys('Hipster')
         self.browser.find_element_by_id("id_text").send_keys('MAN do I love my frapp-omegaccino with extra zest!')
         self.browser.find_element_by_id("comment_submit").click()
-        self.browser.find_element_by_id("comment_approve").click()
 
         # Let's just make sure a non-admin user can see the comments!
-        self.browser.find_element_by_link_text("Log out").click()
+        self.browser.find_element_by_id("id_account_dropdown").click()
+        self.browser.find_element_by_id("id_logout").click()
         
         login_button = self.browser.find_element_by_id('login_button')
         login_button.click()

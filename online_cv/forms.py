@@ -136,6 +136,7 @@ class cvCertificationForm(forms.ModelForm):
         model = cvCertification
         fields = ('date', 'certification',)
         widgets = {'date': DatePickerInput(attrs={"placeholder": "DD/MM/YYYY"}, options={"format": "DD/MM/YYYY"}),}
+        
 class cvLanguageForm(forms.ModelForm):
 
     class Meta:

@@ -9,6 +9,8 @@ class PostForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Make sure choices selection gets updated every time page is loaded
+        self.fields['category'].widget.choices = Category.objects.all().values_list('name','name')
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
