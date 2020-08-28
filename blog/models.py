@@ -9,7 +9,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    text = CKEditor5Field('Text', config_name='extends', blank=True)
+    text = CKEditor5Field('Text', config_name='blog', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     category = models.CharField(max_length=255, default='uncategorised')

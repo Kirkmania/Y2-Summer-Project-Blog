@@ -193,7 +193,7 @@ CKEDITOR_5_CONFIGS = {
                     '|', 'bulletedList', 'numberedList', '|', 'link', 'blockQuote',],
 
     },
-    'extends': {
+    'blog': {
         'blockToolbar': [
             'paragraph', 'heading1', 'heading2', 'heading3',
             '|',
