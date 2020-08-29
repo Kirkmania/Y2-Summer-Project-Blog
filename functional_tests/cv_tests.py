@@ -67,8 +67,10 @@ class NewCVTest(StaticLiveServerTestCase):
 
     # Next is a short profile summary, some kind of char limit here
         self.assertURLEqual(self.browser.current_url, self.live_server_url + "/cv/profile")
-        self.browser.find_element_by_class_name("ck-content").send_keys("This is my profile bio lorem ipsum cheeki breeki iv\
+        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
+        self.browser.find_element_by_class_name("cke_editable").send_keys("This is my profile bio lorem ipsum cheeki breeki iv\
  damke pogchampion my duderino. That's my secret, captain, I'm always angry. How much wood could a woodchuck chuck if a woodchuck could chuck wood?")
+        self.browser.switch_to_default_content()
         self.browser.find_element_by_id('profile_next').click()
 
     # Next is the education section, where he enters his uni details and then clicks "save and add another"
@@ -288,8 +290,7 @@ class NewCVTest(StaticLiveServerTestCase):
 
     # BIG CHECK TIME let's see if all the text George filled in is present!
         response = self.client.get('/cv/preview')
-        self.browser
-        self.assertContains(response, "This is my profile bio lorem ipsum cheeki breeki iv damke pogchampion my duderino. That's my secret, captain, I'm always angry. How much wood could a woodchuck chuck if a woodchuck could chuck wood?")
+        self.assertContains(response, "This is my profile bio lorem ipsum cheeki breeki iv damke pogchampion my duderino. That&#39;s my secret, captain, I&#39;m always angry. How much wood could a woodchuck chuck if a woodchuck could chuck wood?")
         self.assertContains(response,"Scuba")
         self.assertContains(response,"I can scuba!")
         self.assertContains(response,"Gaming")
@@ -301,6 +302,3 @@ class NewCVTest(StaticLiveServerTestCase):
         self.assertContains(response,"BSc Degree: Computer Science (currently studying) at University of Birmingham, Birmingham")
         self.assertContains(response,"<strong>Visitor Experience Helper</strong>, The Science Museum, London")
         self.assertContains(response,"I worked as a volunteer in the &ldquo;Visitor Experience&rdquo; team for the Science Museum&rsquo;s Power Up exhibition.")
-        self.fail("finish the test!")
-
-    # He is met with a formatted version of his cv (NOTE: exportable to pdf if possible!)

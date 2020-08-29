@@ -125,7 +125,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
         newpost_title = self.browser.find_element_by_id('id_title')
         newpost_title.send_keys('Lorem Ipsum')
-        newpost_richtext = self.browser.find_element_by_xpath('//*[@id="div_id_text"]/div/div/div[2]/div')
+        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
+        newpost_richtext = self.browser.find_element_by_class_name("cke_editable")
         newpost_richtext.send_keys('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac ex ante.' +
             'Nullam iaculis fermentum tortor, non suscipit elit aliquet quis. Donec consequat placerat accumsan.' +
             'Praesent et ante non mi finibus pellentesque sed eget metus. In posuere, massa vel aliquet elementum,' +
@@ -135,6 +136,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
             'Quisque consectetur leo ante, id tincidunt erat semper sit amet. In pellentesque feugiat iaculis.' +
             'Ut sit amet ante facilisis, auctor neque a, tincidunt libero. Pellentesque ut varius lorem, in luctus sapien.' +
             'Praesent ullamcorper ante eget magna maximus accumsan. ')
+        self.browser.switch_to_default_content()
         Select(self.browser.find_element_by_id("id_category")).select_by_value('Testing')
         self.browser.find_element_by_id('submit-id-save_as_draft').click()
 
@@ -145,9 +147,11 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # He notices a missing line to add before publishing
         self.browser.find_element_by_id('post_edit').click()
 
-        newpost_richtext = self.browser.find_element_by_xpath('//*[@id="div_id_text"]/div/div/div[2]/div')
+        self.browser.switch_to_frame(self.browser.find_element_by_tag_name('iframe'))
+        newpost_richtext = self.browser.find_element_by_class_name("cke_editable")
         
         newpost_richtext.send_keys(' This is my missing line!')
+        self.browser.switch_to_default_content()
         post_save_button = self.browser.find_element_by_id('submit-id-save_as_draft')
         post_save_button.click()
 
