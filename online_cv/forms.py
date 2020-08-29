@@ -4,11 +4,6 @@ from crispy_forms.layout import Layout, Submit, Row, Column, ButtonHolder, Div, 
 from bootstrap_datepicker_plus import DatePickerInput
 from .models import *
 
-class CVForm(forms.ModelForm):
-    class Meta:
-        model = CV
-        fields = ('text',)
-
 class cvPersonalDetailsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

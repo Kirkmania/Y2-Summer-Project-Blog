@@ -2,17 +2,9 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-from django_ckeditor_5.fields import CKEditor5Field
 from ckeditor.fields import RichTextField
 
 # Create your models here.
-class CV(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text = CKEditor5Field('text', config_name='default', blank=True)
-    
-    def __str__(self):
-        return self.text
-
 class cvPersonalDetails(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
@@ -28,7 +20,7 @@ class cvPersonalDetails(models.Model):
 
 class cvProfile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text = CKEditor5Field('Personal Statement', config_name='default', blank=True)
+    text = RichTextField(config_name='job', blank=True)
 
     def __str__(self):
         return self.user.get_full_name()

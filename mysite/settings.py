@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'blog',
     'accounts',
     'online_cv',
-    'django_ckeditor_5',
     'ckeditor',
     'crispy_forms',
     'bootstrap_datepicker_plus',
@@ -129,6 +128,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
 # Redirect successful login to top-level index (homepage)
 LOGIN_REDIRECT_URL = '/'
 
@@ -157,91 +157,26 @@ CKEDITOR_CONFIGS = {
         'height': 170,
         'width': 750
     },
-}
-
-customColorPalette = [
-        {
-            'color': 'hsl(4, 90%, 58%)',
-            'label': 'Red'
-        },
-        {
-            'color': 'hsl(340, 82%, 52%)',
-            'label': 'Pink'
-        },
-        {
-            'color': 'hsl(291, 64%, 42%)',
-            'label': 'Purple'
-        },
-        {
-            'color': 'hsl(262, 52%, 47%)',
-            'label': 'Deep Purple'
-        },
-        {
-            'color': 'hsl(231, 48%, 48%)',
-            'label': 'Indigo'
-        },
-        {
-            'color': 'hsl(207, 90%, 54%)',
-            'label': 'Blue'
-        },
-    ]
-
-#CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
-CKEDITOR_5_CONFIGS = {
-    'default': {
-        'toolbar': [ 'fontSize', 'fontFamily', 'fontColor', '|', 'bold', 'italic', 'underline', 
-                    '|', 'bulletedList', 'numberedList', '|', 'link', 'blockQuote',],
-
-    },
     'blog': {
-        'blockToolbar': [
-            'paragraph', 'heading1', 'heading2', 'heading3',
-            '|',
-            'bulletedList', 'numberedList',
-            '|',
-            'blockQuote', 'imageUpload'
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+                '/',
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Blockquote', 'CodeSnippet', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',]},
+            {'name': 'insert',
+             'items': ['Link', 'Image', 'UploadImage', 'Table', 'HorizontalRule', '-', 'Source', 'Preview']},
         ],
-        'toolbar': ['heading', '|', 'alignment', 'outdent', 'indent', '|', 'bold', 'italic', 'underline', 'strikethrough',
-        'code', '|', 'subscript', 'superscript', 'highlight', '|',
-                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'link', 'imageUpload', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
-                    'insertTable', '|', 'undo', 'redo',],
-        'image': {
-            'toolbar': ['imageTextAlternative', 'imageTitle', '|', 'imageStyle:alignLeft', 'imageStyle:full',
-                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
-            'styles': [
-                'full',
-                'side',
-                'alignLeft',
-                'alignRight',
-                'alignCenter',
-            ]
-
-        },
-        'table': {
-            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
-            'tableProperties', 'tableCellProperties' ],
-            'tableProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
-            },
-            'tableCellProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
-            }
-        },
-        'heading' : {
-            'options': [
-                { 'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph' },
-                { 'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1' },
-                { 'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2' },
-                { 'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3' }
-            ]
-        },
-        'fontSize' : {
-            'options': [
-                '9', '10', '11', '12', 'default', '14', '15', '16', '17'
-            ]
-        }
-    }
+        'height': 170,
+        'width': 700,
+        'extraPlugins': ','.join([
+            'codesnippet',
+            'image2',
+            ]),
+        "codeSnippet_theme": "monokai_sublime",
+        'removeDialogTabs': 'image:advanced;link:advanced',
+    },
 }
