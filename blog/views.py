@@ -14,7 +14,6 @@ from .decorators import unauthenticated_user, allowed_users
 # NOTE: My first view creation :o
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-
     category_menu = Category.objects.all()
     return render(request, 'blog/post_list.html', {'posts': posts, 'category_menu': category_menu})
 
@@ -143,7 +142,7 @@ class AddCategoryView(PermissionRequiredMixin, CreateView): # We have to include
     fields = '__all__'
 
 def category_view(request, category):
-    category_posts = Post.objects.filter(category__iexact=category.replace('-', ' '))
+    category_posts = Post.objects.filter(category__iexact=category.replace('-', ' '), published_date__lte=timezone.now()).order_by('-published_date')
     category_menu = Category.objects.all()
     return render(request, 'blog/categories.html', {'category': category.title().replace('-', ' '), 'category_posts': category_posts, 'category_menu': category_menu})
 

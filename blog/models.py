@@ -17,7 +17,7 @@ class Post(models.Model):
     def publish(self):
         self.published_date = timezone.now()
         self.save()
-
+        
     # Added in order to count number of approved comments in post list
     def approved_comments(self):
         return self.comments.filter(approved_comment=True)
